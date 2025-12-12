@@ -44,9 +44,10 @@ class UpdateChecker {
             
             $transient->response[$plugin_slug] = (object) [
                 'slug' => 'register-affiliate-email',
+                'plugin' => $plugin_slug,
                 'new_version' => $remote_version,
                 'url' => "https://github.com/{$this->github_user}/{$this->github_repo}",
-                'package' => "https://github.com/{$this->github_user}/{$this->github_repo}/archive/refs/heads/main.zip",
+                'package' => "https://github.com/{$this->github_user}/{$this->github_repo}/releases/download/v{$remote_version}/register-affiliate-email.zip",
             ];
         }
 
