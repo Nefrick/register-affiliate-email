@@ -1,0 +1,56 @@
+{
+  "name": "Mailchimp",
+  "description": "Mailchimp Email Marketing Platform",
+  "fields": [
+    {
+      "name": "api_key",
+      "label": "API Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "Enter your Mailchimp API key"
+    },
+    {
+      "name": "datacenter",
+      "label": "Datacenter",
+      "type": "text",
+      "required": true,
+      "placeholder": "us1",
+      "help": "The datacenter prefix from your API key (e.g., us1, us19)"
+    },
+    {
+      "name": "list_id",
+      "label": "Audience ID",
+      "type": "text",
+      "required": true,
+      "placeholder": "abc123def456"
+    },
+    {
+      "name": "double_optin",
+      "label": "Enable Double Opt-in",
+      "type": "checkbox",
+      "default": false
+    },
+    {
+      "name": "tags",
+      "label": "Tags",
+      "type": "text",
+      "required": false,
+      "placeholder": "website, newsletter",
+      "help": "Comma-separated tags"
+    }
+  ],
+  "config": {
+    "service_type": "mailchimp",
+    "endpoint": "https://{{datacenter}}.api.mailchimp.com/3.0/lists/{{list_id}}/members",
+    "method": "POST",
+    "headers": {
+      "Authorization": "Bearer {{api_key}}",
+      "Content-Type": "application/json"
+    },
+    "body_template": {
+      "email_address": "{{email}}",
+      "status": "subscribed",
+      "tags": "{{tags}}"
+    }
+  }
+}
