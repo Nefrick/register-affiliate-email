@@ -78,12 +78,15 @@ class UpdateChecker {
             'name' => 'Register Affiliate Email',
             'slug' => 'register-affiliate-email',
             'version' => $remote_version,
-            'author' => '<a href="https://yourwebsite.com">Your Name</a>',
+            'author' => '<a href="https://github.com/' . $this->github_user . '">Michael Chizhevskiy</a>',
             'homepage' => "https://github.com/{$this->github_user}/{$this->github_repo}",
+            'requires' => '5.8',
+            'tested' => '6.9',
+            'requires_php' => '7.4',
             'sections' => [
                 'description' => $remote_readme,
             ],
-            'download_link' => "https://github.com/{$this->github_user}/{$this->github_repo}/archive/refs/heads/main.zip",
+            'download_link' => "https://github.com/{$this->github_user}/{$this->github_repo}/releases/download/v{$remote_version}/register-affiliate-email.zip",
         ];
     }
 

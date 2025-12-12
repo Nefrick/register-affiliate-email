@@ -9,6 +9,7 @@
  * Text Domain: register-affiliate-email
  * Domain Path: /languages
  * Requires at least: 5.8
+ * Tested up to: 6.9
  * Requires PHP: 7.4
  */
 
