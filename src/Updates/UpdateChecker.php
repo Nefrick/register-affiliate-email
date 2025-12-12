@@ -72,27 +72,18 @@ class UpdateChecker {
         }
 
         $remote_version = $this->getRemoteVersion();
-        $readme_data = $this->parseReadme();
+        $remote_readme = $this->getRemoteReadme();
 
         return (object) [
             'name' => 'Register Affiliate Email',
             'slug' => 'register-affiliate-email',
             'version' => $remote_version,
-            'author' => '<a href="https://github.com/' . $this->github_user . '">Michael Chizhevskiy</a>',
+            'author' => '<a href="https://yourwebsite.com">Your Name</a>',
             'homepage' => "https://github.com/{$this->github_user}/{$this->github_repo}",
-            'requires' => '5.8',
-            'tested' => '6.4',
-            'requires_php' => '7.4',
-            'sections' => $readme_data['sections'],
-            'banners' => [
-                'low' => "https://raw.githubusercontent.com/{$this->github_user}/{$this->github_repo}/main/assets/banner-772x250.png",
-                'high' => "https://raw.githubusercontent.com/{$this->github_user}/{$this->github_repo}/main/assets/banner-1544x500.png",
+            'sections' => [
+                'description' => $remote_readme,
             ],
-            'icons' => [
-                '1x' => "https://raw.githubusercontent.com/{$this->github_user}/{$this->github_repo}/main/assets/icon-128x128.png",
-                '2x' => "https://raw.githubusercontent.com/{$this->github_user}/{$this->github_repo}/main/assets/icon-256x256.png",
-            ],
-            'download_link' => "https://github.com/{$this->github_user}/{$this->github_repo}/releases/download/v{$remote_version}/register-affiliate-email.zip",
+            'download_link' => "https://github.com/{$this->github_user}/{$this->github_repo}/archive/refs/heads/main.zip",
         ];
     }
 
@@ -142,88 +133,5 @@ class UpdateChecker {
         }
 
         return wp_remote_retrieve_body($response);
-    }
-
-    /**
-     * Parse README.md into sections for plugin info
-     *
-     * @return array Parsed sections
-     */
-    private function parseReadme() {
-        $readme = $this->getRemoteReadme();
-        
-        if (empty($readme) || $readme === 'No description available.') {
-            return [
-                'sections' => [
-                    'description' => 'A flexible WordPress plugin for managing email subscription forms with multiple service integrations.',
-                ],
-            ];
-        }
-
-        // Parse markdown sections
-        $sections = [];
-        $current_section = '';
-        $current_content = '';
-
-        $lines = explode("\n", $readme);
-        
-        foreach ($lines as $line) {
-            // Detect h2 headers (## Section Name)
-            if (preg_match('/^## (.+)$/', $line, $matches)) {
-                // Save previous section
-                if ($current_section && $current_content) {
-                    $sections[$current_section] = $this->markdownToHtml(trim($current_content));
-                }
-                
-                // Start new section
-                $current_section = strtolower(str_replace(' ', '_', $matches[1]));
-                $current_content = '';
-            } else {
-                $current_content .= $line . "\n";
-            }
-        }
-
-        // Save last section
-        if ($current_section && $current_content) {
-            $sections[$current_section] = $this->markdownToHtml(trim($current_content));
-        }
-
-        // Ensure description exists
-        if (empty($sections['description'])) {
-            $sections['description'] = 'A flexible WordPress plugin for managing email subscription forms.';
-        }
-
-        return ['sections' => $sections];
-    }
-
-    /**
-     * Convert basic markdown to HTML
-     *
-     * @param string $markdown Markdown content
-     * @return string HTML content
-     */
-    private function markdownToHtml($markdown) {
-        // Convert headers
-        $html = preg_replace('/^### (.+)$/m', '<h3>$1</h3>', $markdown);
-        $html = preg_replace('/^## (.+)$/m', '<h2>$1</h2>', $markdown);
-        
-        // Convert bold
-        $html = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $html);
-        
-        // Convert lists
-        $html = preg_replace('/^\* (.+)$/m', '<li>$1</li>', $html);
-        $html = preg_replace('/(<li>.*<\/li>)/s', '<ul>$1</ul>', $html);
-        
-        // Convert code blocks
-        $html = preg_replace('/```(\w+)?\n(.*?)\n```/s', '<pre><code>$2</code></pre>', $html);
-        $html = preg_replace('/`([^`]+)`/', '<code>$1</code>', $html);
-        
-        // Convert links
-        $html = preg_replace('/\[([^\]]+)\]\(([^\)]+)\)/', '<a href="$2">$1</a>', $html);
-        
-        // Convert line breaks
-        $html = wpautop($html);
-        
-        return $html;
     }
 }
