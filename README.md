@@ -1,191 +1,145 @@
 # Register Affiliate Email
 
-A flexible WordPress plugin for managing email subscription forms with multiple service integrations.
+**The easiest way to connect email subscription forms with multiple marketing services.**
 
-## Features
+Grow your email list faster with flexible forms that work with AWeber, Customer.io, Mailchimp, and more. No coding required.
 
-- **OOP Architecture**: Clean, maintainable code with proper class autoloading
-- **Multiple Service Support**: Integrate with AWeber, Customer.io, and any API-based email service
-- **Custom Post Type**: Manage email services as WordPress custom posts
-- **JSON Configuration**: Flexible service configuration using JSON format
-- **Automatic Updates**: Built-in GitHub update checker
-- **No jQuery**: Pure vanilla JavaScript for better performance
-- **Shortcode Ready**: Simple `[register_affiliate_email]` shortcode
-- **Customizable Form**: Configure placeholder text, button text, and background image
+## Description
+
+Register Affiliate Email is a powerful yet simple WordPress plugin that helps you capture email subscribers and automatically sync them with your favorite email marketing services.
+
+**Perfect for:**
+* Affiliate marketers managing multiple campaigns
+* Bloggers growing their email lists
+* Businesses using multiple email platforms
+* Anyone who wants flexible, beautiful subscription forms
+
+**What makes it special:**
+* **One Form, Multiple Services** - Subscribers automatically added to all your connected services
+* **Simple Setup** - Just add a shortcode and you're done
+* **Beautiful Forms** - Customizable design that matches your site
+* **REST API** - Integrate with any application or landing page builder
+* **Auto Updates** - Get new features automatically from GitHub
+
+## Supported Services
+
+**Currently Integrated:**
+* ✓ AWeber - Popular email marketing platform
+* ✓ Customer.io - Customer engagement automation (with segment support)
+* ✓ Mailchimp - Email marketing and automation
+
+**Easily Extensible:**
+Add any API-based email service with simple JSON configuration. No PHP coding required!
 
 ## Installation
 
+**Method 1: WordPress Admin**
+1. Download the plugin ZIP file
+2. Go to Plugins → Add New → Upload Plugin
+3. Choose the ZIP file and click Install Now
+4. Activate the plugin
+
+**Method 2: Manual**
 1. Upload the plugin files to `/wp-content/plugins/register-affiliate-email/`
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Navigate to **Affiliate Email > Global Settings** to configure your form
-4. Add email services via **Affiliate Email > Email Services**
-5. Use the shortcode `[register_affiliate_email]` on any page or post
+2. Go to Plugins page in WordPress admin
+3. Find "Register Affiliate Email" and click Activate
 
-## Service Configuration
+**Quick Start:**
+1. Go to **Affiliate Email → Global Settings**
+2. Customize your form (button text, placeholder, background)
+3. Go to **Affiliate Email → Email Services** → Add New
+4. Configure your email service (AWeber, Customer.io, or Mailchimp)
+5. Enable the service in Global Settings
+6. Add shortcode `[register_affiliate_email]` to any page
 
-Create a new Email Service and add JSON configuration:
+## Features
 
-```json
-{
-  "service_type": "aweber",
-  "api_key": "your-api-key-here",
-  "list_id": "your-list-id",
-  "endpoint": "https://api.aweber.com/1.0/accounts/YOUR_ACCOUNT/lists/YOUR_LIST/subscribers",
-  "method": "POST",
-  "headers": {
-    "Authorization": "Bearer YOUR_TOKEN",
-    "Content-Type": "application/json"
-  },
-  "body_template": {
-    "email": "{{email}}",
-    "list_id": "{{list_id}}"
-  }
-}
-```
+**For Users:**
+* Simple one-field email form
+* Beautiful, customizable design
+* Works anywhere with shortcode `[register_affiliate_email]`
+* Mobile-responsive
+* Fast and lightweight (no jQuery)
 
-Available placeholders:
-- `{{email}}` - User's email address
-- `{{list_id}}` - List ID from config
-- `{{api_key}}` - API key from config
+**For Developers:**
+* Clean OOP architecture
+* REST API endpoints
+* Custom service integration
+* WordPress coding standards
+* Automatic GitHub updates
+* Extensible with hooks and filters
 
-## REST API Endpoints
+**For Marketers:**
+* Connect unlimited services
+* Segment-based targeting (Customer.io)
+* Track subscription sources
+* Multiple forms on one site
+* Global settings for easy management
 
-### Subscribe to All Services
-```
-POST /wp-json/rae/v1/subscribe
-```
+## Frequently Asked Questions
 
-**Request Body:**
-```json
-{
-  "email": "user@example.com",
-  "additional_data": {
-    "name": "John Doe",
-    "source": "homepage"
-  }
-}
-```
+**How do I add a subscription form?**
 
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Subscribed to 2 of 2 services.",
-  "results": {
-    "success": {
-      "aweber": true,
-      "customerio": true
-    },
-    "failed": {},
-    "total": 2
-  }
-}
-```
+Just add the shortcode `[register_affiliate_email]` to any page, post, or widget area.
 
-### Subscribe to Specific Service
-```
-POST /wp-json/rae/v1/subscribe/{service_id}
-```
+**Can I use multiple email services?**
 
-**Parameters:**
-- `service_id` - ID of the service post
+Yes! Enable as many services as you want in Global Settings. Subscribers will be added to all enabled services automatically.
 
-**Request Body:**
-```json
-{
-  "email": "user@example.com",
-  "additional_data": {}
-}
-```
+**How do I customize the form design?**
 
-### Get Active Services
-```
-GET /wp-json/rae/v1/services
-```
+Go to Affiliate Email → Global Settings. You can change button text, placeholder text, and upload a custom background image.
 
-**Response:**
-```json
-{
-  "total": 2,
-  "services": [
-    {
-      "type": "aweber",
-      "valid": true
-    },
-    {
-      "type": "customerio",
-      "valid": true
-    }
-  ]
-}
-```
+**Does it work with landing page builders?**
 
-## Architecture
+Yes! Use the shortcode in any page builder, or integrate via REST API at `/wp-json/rae/v1/subscribe`
 
-### Service Classes
+**How do I add a new service?**
 
-The plugin uses an abstract service pattern for email integrations:
+1. Go to Affiliate Email → Email Services → Add New
+2. Enter service name
+3. Add JSON configuration with your API credentials
+4. Enable it in Global Settings
 
-**AbstractService** - Base class with common methods:
-- `validate()` - Validate service configuration
-- `authenticate()` - Authenticate with service API
-- `subscribe($email, $data)` - Subscribe email to service
+**Is it GDPR compliant?**
 
-**Concrete Services:**
-- `AWeberService` - AWeber integration
-- `CustomerIOService` - Customer.io integration
-- `MailchimpService` - Mailchimp integration
+The plugin only collects email addresses. You're responsible for adding proper consent mechanisms and privacy policy links to your forms.
 
-**ServiceFactory** - Creates service instances based on type
-**ServiceRouter** - Routes subscription requests to active services
+## Changelog
 
-### Adding Custom Service
+### 0.0.8
+* Added beautiful plugin icons and banners
+* Improved update information display
+* Added WordPress 6.9 compatibility
+* Simplified README for better display
 
-```php
-use RegisterAffiliateEmail\Services\AbstractService;
-use RegisterAffiliateEmail\Services\ServiceFactory;
+### 0.0.7
+* Fixed update mechanism for GitHub releases
+* Improved release detection
 
-class MyCustomService extends AbstractService {
-    public function getType() {
-        return 'my_custom_service';
-    }
-    
-    public function validate() {
-        // Validate configuration
-        return true;
-    }
-    
-    public function authenticate() {
-        // Authenticate with API
-        return true;
-    }
-    
-    public function subscribe($email, $additional_data = []) {
-        // Subscribe logic
-        return true;
-    }
-}
+### 0.0.6
+* Initial public release
+* AWeber integration
+* Customer.io integration with segment support
+* Mailchimp integration
+* REST API implementation
+* Shortcode support
+* Global settings page
 
-// Register the service
-ServiceFactory::registerService('my_custom_service', MyCustomService::class);
-```
+## Privacy Policy
 
-## Plugin Updates
+This plugin does not collect any user data. Email addresses submitted through forms are sent directly to your configured email marketing services.
 
-To enable automatic updates from GitHub:
+## Credits
 
-1. Edit `src/Updates/UpdateChecker.php`
-2. Update `$github_user` and `$github_repo` with your repository details
-3. Create releases on GitHub with version tags (e.g., `v1.0.0`)
-
-## Requirements
-
-- WordPress 5.8+
-- PHP 7.4+
+Developed by Michael Chizhevskiy
 
 ## Support
 
-For issues and feature requests, please visit our GitHub repository.
+Need help? Have a feature request?
+
+* GitHub: https://github.com/Nefrick/register-affiliate-email
+* Issues: https://github.com/Nefrick/register-affiliate-email/issues
 
 ## License
 
