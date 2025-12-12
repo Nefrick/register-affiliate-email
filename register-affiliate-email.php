@@ -3,7 +3,7 @@
  * Plugin Name: Register Affiliate Email
  * Plugin URI: https://github.com/yourusername/register-affiliate-email
  * Description: A flexible email subscription form with multiple service integrations (AWeber, Customer.io, etc.)
- * Version: 0.1.0
+ * Version: 0.0.8
  * Author: Michael Chizhevskiy
  * Author URI: https://yourwebsite.com
  * Text Domain: register-affiliate-email
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('RAE_VERSION', '0.1.0');
+define('RAE_VERSION', '0.0.8');
 define('RAE_PLUGIN_FILE', __FILE__);
 define('RAE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RAE_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -48,14 +48,7 @@ spl_autoload_register(function ($class) {
 // Initialize plugin
 add_action('plugins_loaded', function() {
     Plugin::getInstance()->init();
-});
-
-// Activation hook
-register_activation_hook(__FILE__, function() {
-    Plugin::getInstance()->activate();
-});
-
-// Deactivation hook
+});/ Deactivation hook
 register_deactivation_hook(__FILE__, function() {
     Plugin::getInstance()->deactivate();
 });
