@@ -1,44 +1,8 @@
-# Assets для плагина
+# Plugin Assets
 
-Эта папка содержит графические ресурсы для красивого отображения плагина.
+This folder contains visual assets for the Register Affiliate Email plugin:
 
-## Необходимые файлы:
-
-### Баннеры (для модального окна обновления):
-- **banner-772x250.png** - баннер низкого разрешения (772x250 px)
-- **banner-1544x500.png** - баннер высокого разрешения (1544x500 px)
-
-### Иконки (для списка плагинов):
-- **icon-128x128.png** - иконка 1x (128x128 px)
-- **icon-256x256.png** - иконка 2x (256x256 px)
-
-## Рекомендации по дизайну:
-
-### Баннеры:
-- Используйте фирменные цвета плагина
-- Добавьте название "Register Affiliate Email"
-- Можно добавить иконки сервисов (AWeber, Customer.io, Mailchimp)
-- Простой, чистый дизайн
-
-### Иконки:
-- Квадратные (128x128 и 256x256)
-- Простая иконка с буквой "R" или конверт с символом @
-- Прозрачный фон (PNG)
-- Яркие цвета для узнаваемости
-
-## Создание графики:
-
-Вы можете использовать:
-- **Canva** (canva.com) - бесплатные шаблоны
-- **Figma** (figma.com) - профессиональный дизайн
-- **Photoshop/GIMP** - для продвинутых пользователей
-
-## После создания:
-
-1. Сохраните все 4 файла в эту папку
-2. Закоммитьте в Git: `git add assets/` + `git commit` + `git push`
-3. GitHub автоматически подхватит файлы через raw.githubusercontent.com
-
-Готовые файлы будут доступны по URL:
-- https://raw.githubusercontent.com/Nefrick/register-affiliate-email/main/assets/banner-772x250.png
-- https://raw.githubusercontent.com/Nefrick/register-affiliate-email/main/assets/icon-128x128.png
+- **icon-128x128.png** - Plugin icon (128x128px)
+- **icon-256x256.png** - Plugin icon retina (256x256px)
+- **banner-772x250.png** - Plugin banner (772x250px)
+- **banner-1544x500.png** - Plugin banner retina (1544x500px)
