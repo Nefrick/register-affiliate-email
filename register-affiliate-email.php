@@ -48,7 +48,9 @@ spl_autoload_register(function ($class) {
 // Initialize plugin
 add_action('plugins_loaded', function() {
     Plugin::getInstance()->init();
-});/ Deactivation hook
+});
+
+// Deactivation hook
 register_deactivation_hook(__FILE__, function() {
     Plugin::getInstance()->deactivate();
 });
