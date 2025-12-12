@@ -1,0 +1,19 @@
+/**
+ * Admin Panel Styles
+ */
+
+.rae-image-preview {
+    margin-top: 10px;
+}
+
+.rae-image-preview img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    background: white;
+}
+
+.rae-upload-image,
+.rae-remove-image {
+    margin-right: 10px;
+}

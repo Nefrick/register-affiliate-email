@@ -1,0 +1,102 @@
+/**
+ * Frontend Styles
+ */
+
+.rae-form-container {
+    padding: 40px 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.rae-subscription-form {
+    width: 100%;
+}
+
+.rae-form-inner {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.rae-form-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.rae-email-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.rae-email-input:focus {
+    outline: none;
+    border-color: #0073aa;
+}
+
+.rae-submit-button {
+    padding: 12px 30px;
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.rae-submit-button:hover:not(:disabled) {
+    background-color: #005a87;
+}
+
+.rae-submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.rae-message {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.rae-message--success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.rae-message--error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.rae-loading {
+    text-align: center;
+    padding: 10px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .rae-form-group {
+        flex-direction: column;
+    }
+
+    .rae-email-input,
+    .rae-submit-button {
+        width: 100%;
+    }
+}

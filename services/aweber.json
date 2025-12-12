@@ -1,0 +1,41 @@
+{
+  "name": "AWeber",
+  "description": "AWeber Email Marketing Service",
+  "fields": [
+    {
+      "name": "client_id",
+      "label": "Client ID",
+      "type": "text",
+      "required": true,
+      "placeholder": "Enter client ID"
+    },
+    {
+      "name": "access_token",
+      "label": "Access Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "Enter access token"
+    },
+    {
+      "name": "refresh_token",
+      "label": "Refresh Token",
+      "type": "password",
+      "required": true,
+      "placeholder": "Enter refresh token"
+    }
+  ],
+  "config": {
+    "service_type": "aweber",
+    "endpoint": "https://api.aweber.com/1.0/accounts/subscribers",
+    "method": "POST",
+    "headers": {
+      "Authorization": "Bearer {{access_token}}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "email": "{{email}}",
+      "client_id": "{{client_id}}",
+      "refresh_token": "{{refresh_token}}"
+    }
+  }
+}
