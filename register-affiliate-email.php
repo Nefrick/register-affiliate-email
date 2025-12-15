@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Register Affiliate Email
- * Plugin URI: https://github.com/yourusername/register-affiliate-email
+ * Plugin URI: https://github.com/Nefrick/register-affiliate-email
  * Description: A flexible email subscription form with multiple service integrations (AWeber, Customer.io, etc.)
  * Version: 0.1.0
  * Author: Michael Chizhevskiy
- * Author URI: https://yourwebsite.com
+ * Author URI: https://github.com/Nefrick/register-affiliate-email
  * Text Domain: register-affiliate-email
  * Domain Path: /languages
  * Requires at least: 5.8

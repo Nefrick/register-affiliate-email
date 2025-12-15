@@ -16,7 +16,7 @@ class ServiceTemplateManager {
      * @return array Array of service templates
      */
     public static function getAvailableServices() {
-        $services_dir = RAE_PLUGIN_DIR . 'services/';
+        $services_dir = RAE_PLUGIN_DIR . 'service-configs/';
         $services = [];
 
         if (!is_dir($services_dir)) {
@@ -42,7 +42,7 @@ class ServiceTemplateManager {
      * @return array|false Service data or false on failure
      */
     public static function loadServiceTemplate($service_slug) {
-        $file_path = RAE_PLUGIN_DIR . 'services/' . $service_slug . '.json';
+        $file_path = RAE_PLUGIN_DIR . 'service-configs/' . $service_slug . '.json';
 
         if (!file_exists($file_path)) {
             return false;
