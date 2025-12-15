@@ -48,6 +48,7 @@ class Plugin {
         new Frontend\Shortcode();
         new Frontend\Assets();
         new Integrations\ServiceManager();
+        new Integrations\Multilanguage();
         
         // Initialize REST API
         new API\SubscriptionEndpoint();

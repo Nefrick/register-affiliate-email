@@ -49,11 +49,26 @@ class Settings {
      * @return array
      */
     public static function getSettings() {
-        return get_option('rae_form_settings', [
+        $settings = get_option('rae_form_settings', [
             'input_placeholder' => __('Enter your email', 'register-affiliate-email'),
             'button_text' => __('Subscribe', 'register-affiliate-email'),
+            'form_heading' => '',
+            'form_subheading' => '',
             'background_image' => '',
+            'show_agreement' => false,
+            'agreement_text' => __('By subscribing, I accept the Terms and Privacy Policy and confirm that I am at least 19 years old.', 'register-affiliate-email'),
+            'success_message' => __('Thank you for subscribing! Please check your email for confirmation.', 'register-affiliate-email'),
+            'active_template' => 'default',
             'enabled_services' => []
         ]);
+
+        // Apply translations to dynamic content
+        foreach (['input_placeholder', 'button_text', 'form_heading', 'form_subheading', 'agreement_text', 'success_message'] as $key) {
+            if (isset($settings[$key]) && !empty($settings[$key])) {
+                $settings[$key] = \RegisterAffiliateEmail\Translations\TranslationsManager::translateByKey($key, $settings[$key]);
+            }
+        }
+
+        return $settings;
     }
 }

@@ -96,6 +96,16 @@ class SubscriptionEndpoint {
     public function handleSubscription($request) {
         $email = $request->get_param('email');
         $additional_data = $request->get_param('additional_data');
+        $honeypot = $request->get_param('website');
+
+        // Security: Check honeypot (should be empty)
+        if (!empty($honeypot)) {
+            return new \WP_Error(
+                'spam_detected',
+                __('Spam submission detected.', 'register-affiliate-email'),
+                ['status' => 403]
+            );
+        }
 
         // Validate email
         if (!is_email($email)) {
@@ -116,10 +126,16 @@ class SubscriptionEndpoint {
         // Check if at least one service succeeded
         $has_success = !empty($results['success']);
         
+        // Get custom success message from settings
+        $settings = \RegisterAffiliateEmail\Admin\Settings::getSettings();
+        $success_message = !empty($settings['success_message']) 
+            ? $settings['success_message'] 
+            : __('Thank you for subscribing!', 'register-affiliate-email');
+        
         $response = [
             'success' => $has_success,
             'message' => $has_success 
-                ? __('Thank you for subscribing!', 'register-affiliate-email')
+                ? $success_message
                 : __('Subscription failed. Please try again later.', 'register-affiliate-email'),
             'results' => $results,
         ];

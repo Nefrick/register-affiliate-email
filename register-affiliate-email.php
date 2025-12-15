@@ -3,7 +3,7 @@
  * Plugin Name: Register Affiliate Email
  * Plugin URI: https://github.com/Nefrick/register-affiliate-email
  * Description: A flexible email subscription form with multiple service integrations (AWeber, Customer.io, etc.)
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Michael Chizhevskiy
  * Author URI: https://github.com/Nefrick/register-affiliate-email
  * Text Domain: register-affiliate-email
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('RAE_VERSION', '0.1.0');
+define('RAE_VERSION', '0.2.0');
 define('RAE_PLUGIN_FILE', __FILE__);
 define('RAE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RAE_PLUGIN_URL', plugin_dir_url(__FILE__));

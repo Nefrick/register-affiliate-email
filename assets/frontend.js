@@ -25,6 +25,8 @@
 
         const form = event.target;
         const emailInput = form.querySelector('input[name="email"]');
+        const agreementCheckbox = form.querySelector('input[name="agreement"]');
+        const honeypotInput = form.querySelector('input[name="website"]');
         const messageEl = form.querySelector('[data-rae-message]');
         const loadingEl = form.querySelector('[data-rae-loading]');
         const submitBtn = form.querySelector('.rae-submit-button');
@@ -42,6 +44,12 @@
             return;
         }
 
+        // Validate agreement checkbox if present
+        if (agreementCheckbox && !agreementCheckbox.checked) {
+            showMessage(messageEl, raeConfig.messages.agreement || 'Please accept the agreement', 'error');
+            return;
+        }
+
         // Show loading state
         submitBtn.disabled = true;
         loadingEl.style.display = 'block';
@@ -56,6 +64,7 @@
                 },
                 body: JSON.stringify({
                     email: email,
+                    website: honeypotInput ? honeypotInput.value : '',
                     additional_data: {}
                 })
             });
@@ -63,8 +72,20 @@
             const data = await response.json();
 
             if (response.ok && data.success) {
-                showMessage(messageEl, data.message || raeConfig.messages.success, 'success');
-                emailInput.value = '';
+                // Hide entire form and headings
+                const formGroup = form.querySelector('.rae-form-group');
+                const agreementEl = form.querySelector('.rae-agreement');
+                const headingEl = form.querySelector('.rae-form-heading');
+                const subheadingEl = form.querySelector('.rae-form-subheading');
+                
+                if (formGroup) formGroup.style.display = 'none';
+                if (agreementEl) agreementEl.style.display = 'none';
+                if (headingEl) headingEl.style.display = 'none';
+                if (subheadingEl) subheadingEl.style.display = 'none';
+                if (loadingEl) loadingEl.style.display = 'none';
+                
+                // Show success message centered
+                showSuccessMessage(messageEl, data.message || raeConfig.messages.success);
             } else {
                 showMessage(messageEl, data.message || raeConfig.messages.error, 'error');
             }
@@ -74,6 +95,12 @@
             submitBtn.disabled = false;
             loadingEl.style.display = 'none';
         }
+    }
+
+    function showSuccessMessage(element, message) {
+        element.innerHTML = message;
+        element.className = 'rae-message rae-message--success rae-message--centered';
+        element.style.display = 'block';
     }
 
     function showMessage(element, message, type) {

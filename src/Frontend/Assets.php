@@ -46,6 +46,7 @@ class Assets {
             'messages' => [
                 'required' => __('Please enter your email address.', 'register-affiliate-email'),
                 'invalid' => __('Please enter a valid email address.', 'register-affiliate-email'),
+                'agreement' => __('Please accept the agreement to continue.', 'register-affiliate-email'),
                 'success' => __('Thank you for subscribing!', 'register-affiliate-email'),
                 'error' => __('An error occurred. Please try again.', 'register-affiliate-email')
             ]

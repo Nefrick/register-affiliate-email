@@ -71,9 +71,15 @@ class Menu {
      */
     private function saveSettings() {
         $settings = [
-            'input_placeholder' => sanitize_text_field($_POST['rae_input_placeholder'] ?? ''),
-            'button_text' => sanitize_text_field($_POST['rae_button_text'] ?? ''),
+            'input_placeholder' => sanitize_text_field(wp_unslash($_POST['rae_input_placeholder'] ?? '')),
+            'button_text' => sanitize_text_field(wp_unslash($_POST['rae_button_text'] ?? '')),
+            'form_heading' => wp_kses_post(wp_unslash($_POST['rae_form_heading'] ?? '')),
+            'form_subheading' => wp_kses_post(wp_unslash($_POST['rae_form_subheading'] ?? '')),
             'background_image' => esc_url_raw($_POST['rae_background_image'] ?? ''),
+            'show_agreement' => isset($_POST['rae_show_agreement']),
+            'agreement_text' => wp_kses_post(wp_unslash($_POST['rae_agreement_text'] ?? '')),
+            'success_message' => wp_kses_post(wp_unslash($_POST['rae_success_message'] ?? '')),
+            'active_template' => sanitize_text_field($_POST['rae_active_template'] ?? 'default'),
             'enabled_services' => array_map('intval', $_POST['rae_enabled_services'] ?? [])
         ];
 
