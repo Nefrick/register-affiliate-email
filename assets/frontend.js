@@ -52,7 +52,20 @@
 
         // Show loading state
         submitBtn.disabled = true;
-        loadingEl.style.display = 'block';
+        
+        // Hide all form elements
+        const formGroup = form.querySelector('.rae-form-group');
+        const agreementEl = form.querySelector('.rae-agreement');
+        const headingEl = form.querySelector('.rae-form-heading, .rae-fortune-form-heading');
+        const subheadingEl = form.querySelector('.rae-form-subheading, .rae-fortune-form-subheading');
+        
+        if (formGroup) formGroup.style.display = 'none';
+        if (agreementEl) agreementEl.style.display = 'none';
+        if (headingEl) headingEl.style.display = 'none';
+        if (subheadingEl) subheadingEl.style.display = 'none';
+        
+        // Show loading spinner
+        loadingEl.style.display = 'flex';
         messageEl.style.display = 'none';
 
         try {
@@ -72,24 +85,37 @@
             const data = await response.json();
 
             if (response.ok && data.success) {
-                // Hide entire form and headings
-                const formGroup = form.querySelector('.rae-form-group');
-                const agreementEl = form.querySelector('.rae-agreement');
-                const headingEl = form.querySelector('.rae-form-heading');
-                const subheadingEl = form.querySelector('.rae-form-subheading');
-                
-                if (formGroup) formGroup.style.display = 'none';
-                if (agreementEl) agreementEl.style.display = 'none';
-                if (headingEl) headingEl.style.display = 'none';
-                if (subheadingEl) subheadingEl.style.display = 'none';
+                // Hide loading spinner
                 if (loadingEl) loadingEl.style.display = 'none';
                 
                 // Show success message centered
                 showSuccessMessage(messageEl, data.message || raeConfig.messages.success);
             } else {
+                // Restore form on error
+                const formGroup = form.querySelector('.rae-form-group');
+                const agreementEl = form.querySelector('.rae-agreement');
+                const headingEl = form.querySelector('.rae-form-heading, .rae-fortune-form-heading');
+                const subheadingEl = form.querySelector('.rae-form-subheading, .rae-fortune-form-subheading');
+                
+                if (formGroup) formGroup.style.display = '';
+                if (agreementEl) agreementEl.style.display = '';
+                if (headingEl) headingEl.style.display = '';
+                if (subheadingEl) subheadingEl.style.display = '';
+                
                 showMessage(messageEl, data.message || raeConfig.messages.error, 'error');
             }
         } catch (error) {
+            // Restore form on error
+            const formGroup = form.querySelector('.rae-form-group');
+            const agreementEl = form.querySelector('.rae-agreement');
+            const headingEl = form.querySelector('.rae-form-heading, .rae-fortune-form-heading');
+            const subheadingEl = form.querySelector('.rae-form-subheading, .rae-fortune-form-subheading');
+            
+            if (formGroup) formGroup.style.display = '';
+            if (agreementEl) agreementEl.style.display = '';
+            if (headingEl) headingEl.style.display = '';
+            if (subheadingEl) subheadingEl.style.display = '';
+            
             showMessage(messageEl, raeConfig.messages.error, 'error');
         } finally {
             submitBtn.disabled = false;

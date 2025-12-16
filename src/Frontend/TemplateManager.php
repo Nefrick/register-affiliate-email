@@ -66,16 +66,32 @@ class TemplateManager {
      * @return string HTML output
      */
     public static function loadTemplate($template_slug, $data = []) {
-        // Check for template in subdirectory structure first
-        $template_file = RAE_PLUGIN_DIR . 'templates/' . $template_slug . '/template.php';
-        
-        // Fallback to old flat structure for default template
-        if (!file_exists($template_file)) {
-            $template_file = RAE_PLUGIN_DIR . 'templates/' . $template_slug . '.php';
+        $template_file = null;
+
+        // 1. Check theme directory first (highest priority)
+        $theme_template = get_stylesheet_directory() . "/register-affiliate-email/{$template_slug}/template.php";
+        if (file_exists($theme_template)) {
+            $template_file = $theme_template;
+        }
+
+        // 2. Check plugin subdirectory structure
+        if (!$template_file) {
+            $plugin_template = RAE_PLUGIN_DIR . 'templates/' . $template_slug . '/template.php';
+            if (file_exists($plugin_template)) {
+                $template_file = $plugin_template;
+            }
         }
         
-        // Final fallback to default
-        if (!file_exists($template_file)) {
+        // 3. Fallback to old flat structure for default template
+        if (!$template_file) {
+            $flat_template = RAE_PLUGIN_DIR . 'templates/' . $template_slug . '.php';
+            if (file_exists($flat_template)) {
+                $template_file = $flat_template;
+            }
+        }
+        
+        // 4. Final fallback to default
+        if (!$template_file) {
             $template_file = RAE_PLUGIN_DIR . 'templates/default.php';
         }
 

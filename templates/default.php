@@ -40,6 +40,7 @@ if (!empty($settings['background_image'])) {
                     name="email" 
                     class="rae-email-input" 
                     placeholder="<?php echo esc_attr($settings['input_placeholder']); ?>"
+                    autocomplete="email"
                     required
                 />
                 <button type="submit" class="rae-submit-button">

@@ -38,13 +38,16 @@ class Assets {
         );
 
         // Template-specific CSS (if exists)
-        if ($active_template === 'fortune' && file_exists(RAE_PLUGIN_DIR . 'templates/fortune/assets/style.css')) {
-            wp_enqueue_style(
-                'rae-fortune',
-                RAE_PLUGIN_URL . 'templates/fortune/assets/style.css',
-                ['rae-frontend'],
-                RAE_VERSION
-            );
+        if ($active_template !== 'default') {
+            $css_url = $this->getTemplateAssetUrl($active_template, 'style.css');
+            if ($css_url) {
+                wp_enqueue_style(
+                    'rae-' . $active_template,
+                    $css_url,
+                    ['rae-frontend'],
+                    RAE_VERSION
+                );
+            }
         }
 
         // Main frontend JS
@@ -57,14 +60,17 @@ class Assets {
         );
 
         // Template-specific JS (if exists)
-        if ($active_template === 'fortune' && file_exists(RAE_PLUGIN_DIR . 'templates/fortune/assets/script.js')) {
-            wp_enqueue_script(
-                'rae-fortune',
-                RAE_PLUGIN_URL . 'templates/fortune/assets/script.js',
-                ['rae-frontend'],
-                RAE_VERSION,
-                true
-            );
+        if ($active_template !== 'default') {
+            $js_url = $this->getTemplateAssetUrl($active_template, 'script.js');
+            if ($js_url) {
+                wp_enqueue_script(
+                    'rae-' . $active_template,
+                    $js_url,
+                    ['rae-frontend'],
+                    RAE_VERSION,
+                    true
+                );
+            }
         }
 
         wp_localize_script('rae-frontend', 'raeConfig', [
@@ -78,5 +84,28 @@ class Assets {
                 'error' => __('An error occurred. Please try again.', 'register-affiliate-email')
             ]
         ]);
+    }
+
+    /**
+     * Get template asset URL (checks theme first, then plugin)
+     *
+     * @param string $template_slug Template slug
+     * @param string $filename Asset filename (e.g., 'style.css', 'script.js')
+     * @return string|false Asset URL or false if not found
+     */
+    private function getTemplateAssetUrl($template_slug, $filename) {
+        // Check theme directory first
+        $theme_path = get_stylesheet_directory() . "/register-affiliate-email/{$template_slug}/assets/{$filename}";
+        if (file_exists($theme_path)) {
+            return get_stylesheet_directory_uri() . "/register-affiliate-email/{$template_slug}/assets/{$filename}";
+        }
+
+        // Check plugin directory
+        $plugin_path = RAE_PLUGIN_DIR . "templates/{$template_slug}/assets/{$filename}";
+        if (file_exists($plugin_path)) {
+            return RAE_PLUGIN_URL . "templates/{$template_slug}/assets/{$filename}";
+        }
+
+        return false;
     }
 }

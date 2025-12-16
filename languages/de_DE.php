@@ -12,7 +12,7 @@ return [
     'input_placeholder' => 'Geben Sie Ihre E-Mail-Adresse ein',
     'button_text' => 'Abonnieren',
     'agreement_text' => 'Mit der Anmeldung akzeptiert der Benutzer unsere Allgemeinen Geschäftsbedingungen und Datenschutzrichtlinien und bestätigt, dass er mindestens 19 Jahre alt ist.',
-    'success_message' => '<p><strong>Danke!</strong><br>
+    'success_message' => '<p><strong>Danke!</strong>
 Sie haben sich für unsere Mailingliste angemeldet.<br>
 <span>Überprüfen Sie Ihre E-Mail, die Belohnung erwartet Sie!</span></p>',
     
