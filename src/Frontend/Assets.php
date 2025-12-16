@@ -25,6 +25,11 @@ class Assets {
             return;
         }
 
+        // Get active template
+        $settings = \RegisterAffiliateEmail\Admin\Settings::getSettings();
+        $active_template = $settings['active_template'] ?? 'default';
+
+        // Main frontend CSS
         wp_enqueue_style(
             'rae-frontend',
             RAE_PLUGIN_URL . 'assets/frontend.css',
@@ -32,6 +37,17 @@ class Assets {
             RAE_VERSION
         );
 
+        // Template-specific CSS (if exists)
+        if ($active_template === 'fortune' && file_exists(RAE_PLUGIN_DIR . 'templates/fortune/assets/style.css')) {
+            wp_enqueue_style(
+                'rae-fortune',
+                RAE_PLUGIN_URL . 'templates/fortune/assets/style.css',
+                ['rae-frontend'],
+                RAE_VERSION
+            );
+        }
+
+        // Main frontend JS
         wp_enqueue_script(
             'rae-frontend',
             RAE_PLUGIN_URL . 'assets/frontend.js',
@@ -39,6 +55,17 @@ class Assets {
             RAE_VERSION,
             true
         );
+
+        // Template-specific JS (if exists)
+        if ($active_template === 'fortune' && file_exists(RAE_PLUGIN_DIR . 'templates/fortune/assets/script.js')) {
+            wp_enqueue_script(
+                'rae-fortune',
+                RAE_PLUGIN_URL . 'templates/fortune/assets/script.js',
+                ['rae-frontend'],
+                RAE_VERSION,
+                true
+            );
+        }
 
         wp_localize_script('rae-frontend', 'raeConfig', [
             'apiUrl' => esc_url_raw(rest_url()),

@@ -13,6 +13,23 @@ class Menu {
      */
     public function __construct() {
         add_action('admin_menu', [$this, 'registerMenus']);
+        add_action('admin_init', [$this, 'handleUpdateCheck']);
+    }
+
+    /**
+     * Handle update check request
+     */
+    public function handleUpdateCheck() {
+        if (!isset($_GET['rae_check_update']) || !current_user_can('manage_options')) {
+            return;
+        }
+
+        // Clear cache and force check
+        delete_transient('rae_remote_version');
+        delete_site_transient('update_plugins');
+
+        wp_redirect(admin_url('admin.php?page=register-affiliate-email&update-checked=1'));
+        exit;
     }
 
     /**

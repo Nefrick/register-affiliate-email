@@ -24,18 +24,20 @@ class TemplateManager {
             return $templates;
         }
 
-        $files = glob($templates_dir . '*.php');
+        // Scan for subdirectories with template.php files
+        $dirs = glob($templates_dir . '*', GLOB_ONLYDIR);
         
-        foreach ($files as $file) {
-            $slug = basename($file, '.php');
+        foreach ($dirs as $dir) {
+            $template_file = $dir . '/template.php';
             
-            // Skip default template as it's already added
-            if ($slug === 'default') {
+            if (!file_exists($template_file)) {
                 continue;
             }
             
+            $slug = basename($dir);
+            
             // Get template name from file header
-            $file_data = get_file_data($file, [
+            $file_data = get_file_data($template_file, [
                 'name' => 'Template Name'
             ]);
             
@@ -64,9 +66,15 @@ class TemplateManager {
      * @return string HTML output
      */
     public static function loadTemplate($template_slug, $data = []) {
-        $template_file = RAE_PLUGIN_DIR . 'templates/' . $template_slug . '.php';
+        // Check for template in subdirectory structure first
+        $template_file = RAE_PLUGIN_DIR . 'templates/' . $template_slug . '/template.php';
         
-        // Fallback to default if template doesn't exist
+        // Fallback to old flat structure for default template
+        if (!file_exists($template_file)) {
+            $template_file = RAE_PLUGIN_DIR . 'templates/' . $template_slug . '.php';
+        }
+        
+        // Final fallback to default
         if (!file_exists($template_file)) {
             $template_file = RAE_PLUGIN_DIR . 'templates/default.php';
         }

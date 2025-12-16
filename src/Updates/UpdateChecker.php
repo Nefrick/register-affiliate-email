@@ -97,16 +97,29 @@ class UpdateChecker {
     }
 
     /**
-     * Get remote version from GitHub
+     * Get remote version from GitHub (public method for admin)
      *
+     * @param bool $force Force refresh cache
      * @return string|false Remote version or false on failure
      */
-    private function getRemoteVersion() {
+    public function getRemoteVersionPublic($force = false) {
+        return $this->getRemoteVersion($force);
+    }
+
+    /**
+     * Get remote version from GitHub
+     *
+     * @param bool $force Force refresh cache
+     * @return string|false Remote version or false on failure
+     */
+    private function getRemoteVersion($force = false) {
         $transient_key = 'rae_remote_version';
-        $cached = get_transient($transient_key);
         
-        if ($cached !== false) {
-            return $cached;
+        if (!$force) {
+            $cached = get_transient($transient_key);
+            if ($cached !== false) {
+                return $cached;
+            }
         }
 
         $url = "https://api.github.com/repos/{$this->github_user}/{$this->github_repo}/releases/latest";
