@@ -9,9 +9,6 @@
  * @var string $honeypot Honeypot field HTML
  */
 
-// CRITICAL DEBUG - This should always show
-echo "\n<!-- ========== FORTUNE TEMPLATE LOADED ========== -->\n";
-echo "<!-- Template file: " . __FILE__ . " -->\n";
 
 // Clear cache to ensure fresh translations load
 \RegisterAffiliateEmail\Translations\TranslationsManager::clearCache();
@@ -20,15 +17,6 @@ echo "<!-- Template file: " . __FILE__ . " -->\n";
 $current_locale = get_locale(); // Для отладки
 $template_translations = \RegisterAffiliateEmail\Translations\TranslationsManager::loadTemplateTranslations('fortune', $current_locale);
 
-// DEBUG: показываем детальную информацию
-echo "<!-- DEBUG INFO -->";
-echo "<!-- Current Locale: {$current_locale} -->";
-echo "<!-- Translations loaded: " . count($template_translations) . " keys -->";
-echo "<!-- Theme path: " . ($template_translations['_debug_theme_path'] ?? 'N/A') . " -->";
-echo "<!-- Theme exists: " . ($template_translations['_debug_theme_exists'] ?? 'N/A') . " -->";
-echo "<!-- form_heading: " . htmlspecialchars($template_translations['form_heading'] ?? 'NOT FOUND') . " -->";
-echo "<!-- button_text: " . htmlspecialchars($template_translations['button_text'] ?? 'NOT FOUND') . " -->";
-echo "<!-- initial_text: " . htmlspecialchars($template_translations['initial_text'] ?? 'NOT FOUND') . " -->";
 
 // Fortune-specific settings - translations override admin settings
 $fortune_heading = $template_translations['form_heading'] ?? (!empty($settings['form_heading']) ? $settings['form_heading'] : __('Spin the Wheel!', 'register-affiliate-email'));
@@ -93,7 +81,7 @@ $spin_button_text = $template_translations['spin_button'] ?? 'SPIN NOW';
 
                     <div class="rae-message" data-rae-message style="display: none;"></div>
                     <div class="rae-loading" data-rae-loading style="display: none;">
-                        <?php echo \RegisterAffiliateEmail\Translations\TranslationsManager::__('submitting', 'Submitting...'); ?>
+                        <?php echo \RegisterAffiliateEmail\Translations\TranslationsManager::__('submitting', ''); ?>
                     </div>
 
                     <?php echo $honeypot; ?>

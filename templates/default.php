@@ -61,7 +61,7 @@ if (!empty($settings['background_image'])) {
 
             <div class="rae-message" data-rae-message style="display: none;"></div>
             <div class="rae-loading" data-rae-loading style="display: none;">
-                <?php echo \RegisterAffiliateEmail\Translations\TranslationsManager::__('submitting', 'Submitting...'); ?>
+                <?php echo \RegisterAffiliateEmail\Translations\TranslationsManager::__('submitting', ''); ?>
             </div>
 
             <?php echo $honeypot; ?>

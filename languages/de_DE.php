@@ -17,7 +17,7 @@ Sie haben sich für unsere Mailingliste angemeldet.<br>
 <span>Überprüfen Sie Ihre E-Mail, die Belohnung erwartet Sie!</span></p>',
     
     // Static strings from code
-    'submitting' => 'Senden...',
+    'submitting' => '',
     'please_enter_email' => 'Bitte geben Sie Ihre E-Mail-Adresse ein.',
     'please_enter_valid_email' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
     'please_accept_agreement' => 'Bitte akzeptieren Sie die Vereinbarung, um fortzufahren.',
