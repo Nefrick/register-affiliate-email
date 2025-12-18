@@ -103,10 +103,10 @@
 }
 
 .rae-message {
-    padding: 12px 16px;
+    padding: 0px 16px;
     border-radius: 4px;
     margin-bottom: 15px;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .rae-message--success {
