@@ -55,12 +55,13 @@ class Settings {
             'form_heading' => '',
             'form_subheading' => '',
             'background_image' => '',
-                'button_color' => '#0073aa', // default button color (WP blue)
+            'button_color' => '#0073aa', // default button color (WP blue)
             'show_agreement' => false,
             'agreement_text' => __('By subscribing, I accept the Terms and Privacy Policy and confirm that I am at least 19 years old.', 'register-affiliate-email'),
             'success_message' => __('Thank you for subscribing! Please check your email for confirmation.', 'register-affiliate-email'),
             'active_template' => 'default',
-            'enabled_services' => []
+            'enabled_services' => [],
+            'enabled_post_types' => ['post'] // default: только post
         ]);
 
         // Apply translations to dynamic content

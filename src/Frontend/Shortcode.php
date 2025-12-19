@@ -22,14 +22,14 @@ class Shortcode {
      * @return string HTML output
      */
     public function render($atts) {
+        global $post;
         $settings = \RegisterAffiliateEmail\Admin\Settings::getSettings();
-        
+        $enabled = is_a($post, 'WP_Post') ? get_post_meta($post->ID, '_rae_enable_form', true) : false;
+        if (!$enabled) return '';
         // Honeypot field (hidden from users, catches bots)
         $honeypot = '<input type="text" name="website" value="" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">';
-        
         // Get active template
         $template_slug = TemplateManager::getActiveTemplate();
-        
         // Load template
         return TemplateManager::loadTemplate($template_slug, [
             'settings' => $settings,

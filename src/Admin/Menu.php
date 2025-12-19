@@ -98,7 +98,8 @@ class Menu {
             'agreement_text' => wp_kses_post(wp_unslash($_POST['rae_agreement_text'] ?? '')),
             'success_message' => wp_kses_post(wp_unslash($_POST['rae_success_message'] ?? '')),
             'active_template' => sanitize_text_field($_POST['rae_active_template'] ?? 'default'),
-            'enabled_services' => array_map('intval', $_POST['rae_enabled_services'] ?? [])
+            'enabled_services' => array_map('intval', $_POST['rae_enabled_services'] ?? []),
+            'enabled_post_types' => isset($_POST['rae_enabled_post_types']) ? array_map('sanitize_text_field', (array) $_POST['rae_enabled_post_types']) : ['post']
         ];
 
         update_option('rae_form_settings', $settings);

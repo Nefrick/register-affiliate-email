@@ -252,7 +252,23 @@ $update_available = $remote_version && version_compare($current_version, $remote
                         <?php endif; ?>
                     </td>
                 </tr>
-
+                <!-- ...existing code for enabled services... -->
+                <tr>
+                    <th scope="row">
+                        <label><?php _e('Post Types for Form', 'register-affiliate-email'); ?></label>
+                    </th>
+                    <td>
+                        <?php $post_types = get_post_types(['public' => true], 'objects'); ?>
+                        <?php foreach ($post_types as $type): ?>
+                            <?php if ($type->name === 'attachment') continue; ?>
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" name="rae_enabled_post_types[]" value="<?php echo esc_attr($type->name); ?>" <?php checked(in_array($type->name, $settings['enabled_post_types'] ?? ['post'])); ?> />
+                                <?php echo esc_html($type->labels->singular_name); ?> (<?php echo esc_html($type->name); ?>)
+                            </label>
+                        <?php endforeach; ?>
+                        <span class="description"><?php _e('Select post types where the subscription form can be enabled.', 'register-affiliate-email'); ?></span>
+                    </td>
+                </tr>
                 <tr>
                     <th scope="row">
                         <label><?php _e('Shortcode', 'register-affiliate-email'); ?></label>

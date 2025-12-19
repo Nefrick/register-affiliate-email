@@ -44,15 +44,14 @@ class Plugin {
         // Initialize components
         new Admin\Menu();
         new Admin\Settings();
+        new Admin\MetaBox();
         new PostTypes\ServiceCPT();
         new Frontend\Shortcode();
         new Frontend\Assets();
         new Integrations\ServiceManager();
         new Integrations\Multilanguage();
-        
         // Initialize REST API
         new API\SubscriptionEndpoint();
-        
         // Initialize update checker
         if (is_admin()) {
             new Updates\UpdateChecker();
