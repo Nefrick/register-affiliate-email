@@ -8,9 +8,9 @@ class AWeberService extends AbstractService {
      * Logs all step results
      */
     public function diagnoseConnection() {
-        $client_id = $this->getConfig('client_id');
+        //$client_id = $this->getConfig('client_id');
         $access_token = $this->getConfig('access_token');
-        $refresh_token = $this->getConfig('refresh_token');
+        //$refresh_token = $this->getConfig('refresh_token');
         // $this->log('DIAG: client_id=' . substr($client_id,0,8) . '..., access_token=' . substr($access_token,0,8) . '..., refresh_token=' . substr($refresh_token,0,8) . '...');
 
         // 1. Check /accounts
@@ -130,7 +130,7 @@ class AWeberService extends AbstractService {
 
         // Get account_id (from config or fetch), list_id жёстко для test_list
         $account_id = $this->getConfig('account_id');
-        $list_id = '6755140'; // test_list
+        $list_id = '6755140'; // TODO test_list
 
         // $this->log('Current config: access_token=' . substr($access_token,0,8) . '..., refresh_token=' . substr($refresh_token,0,8) . '..., client_id=' . substr($client_id,0,8) . '...');
         // $this->log('Trying to get account_id and list_id...');
@@ -170,8 +170,8 @@ class AWeberService extends AbstractService {
             if (is_array($error_data) && isset($error_data['status_code']) && $error_data['status_code'] == 401 && $refresh_token) {
                 $new_token = $this->refreshAccessToken($client_id, $refresh_token);
                 if ($new_token && !empty($new_token['access_token'])) {
-                    $old_access = $this->getConfig('access_token');
-                    $old_refresh = $this->getConfig('refresh_token');
+                    //$old_access = $this->getConfig('access_token');
+                    //$old_refresh = $this->getConfig('refresh_token');
                     $access_token = $new_token['access_token'];
                     $new_refresh = $new_token['refresh_token'] ?? $refresh_token;
                     // $this->log('Token refresh: OLD access_token=' . substr($old_access,0,8) . '..., OLD refresh_token=' . substr($old_refresh,0,8) . '...');

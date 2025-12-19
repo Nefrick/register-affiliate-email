@@ -43,9 +43,9 @@ if (!empty($settings['background_image'])) {
                     autocomplete="email"
                     required
                 />
-                <button type="submit" class="rae-submit-button">
-                    <?php echo esc_html($settings['button_text']); ?>
-                </button>
+                    <button type="submit" class="rae-submit-button" style="background: <?php echo esc_attr($settings['button_color'] ?? '#0073aa'); ?>;">
+                        <?php echo esc_html($settings['button_text']); ?>
+                    </button>
             </div>
 
             <?php if (!empty($settings['show_agreement']) && !empty($settings['agreement_text'])) : ?>

@@ -211,6 +211,17 @@ $update_available = $remote_version && version_compare($current_version, $remote
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="rae_button_color">
+                            <?php _e('Button Color', 'register-affiliate-email'); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <input type="color" id="rae_button_color" name="rae_button_color" value="<?php echo esc_attr($settings['button_color'] ?? '#ff5722'); ?>" />
+                        <span class="description"><?php _e('Select the color for the form submit button.', 'register-affiliate-email'); ?></span>
+                    </td>
+                </tr>
 
                 <tr>
                     <th scope="row">

@@ -107,6 +107,21 @@ class SubscriptionEndpoint {
             );
         }
 
+        // Ограничение по IP: не более 5 отправок за 1 час
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        if ($ip) {
+            $transient_key = 'rae_sub_limit_' . md5($ip);
+            $count = (int) get_transient($transient_key);
+            if ($count >= 5) {
+                return new \WP_Error(
+                    'too_many_submissions',
+                    __('You have reached the submission limit. Please try again in 1 hour.', 'register-affiliate-email'),
+                    ['status' => 429]
+                );
+            }
+            set_transient($transient_key, $count + 1, HOUR_IN_SECONDS);
+        }
+
         // Validate email
         if (!is_email($email)) {
             return new \WP_Error(
@@ -125,13 +140,13 @@ class SubscriptionEndpoint {
 
         // Check if at least one service succeeded
         $has_success = !empty($results['success']);
-        
+
         // Get custom success message from settings
         $settings = \RegisterAffiliateEmail\Admin\Settings::getSettings();
         $success_message = !empty($settings['success_message']) 
             ? $settings['success_message'] 
             : __('Thank you for subscribing!', 'register-affiliate-email');
-        
+
         $response = [
             'success' => $has_success,
             'message' => $has_success 

@@ -14,7 +14,7 @@
 \RegisterAffiliateEmail\Translations\TranslationsManager::clearCache();
 
 // Load template-specific translations
-$current_locale = get_locale(); // Для отладки
+$current_locale = get_locale();
 $template_translations = \RegisterAffiliateEmail\Translations\TranslationsManager::loadTemplateTranslations('fortune', $current_locale);
 
 
@@ -63,7 +63,7 @@ $spin_button_text = $template_translations['spin_button'] ?? 'SPIN NOW';
                             autocomplete="email"
                             required
                         />
-                        <button type="submit" class="rae-submit-button">
+                        <button type="submit" class="rae-submit-button" style="background: <?php echo esc_attr($settings['button_color'] ?? '#ff5722'); ?>;">
                             <?php echo esc_html($button_text); ?>
                         </button>
                     </div>
