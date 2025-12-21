@@ -98,6 +98,20 @@ class SubscriptionEndpoint {
         $additional_data = $request->get_param('additional_data');
         $honeypot = $request->get_param('website');
 
+        // Try to get current post ID from referer or context (for classic forms, pass post_id in additional_data)
+        $post_id = 0;
+        if (isset($additional_data['post_id'])) {
+            $post_id = (int)$additional_data['post_id'];
+        } elseif (isset($_POST['post_id'])) {
+            $post_id = (int)$_POST['post_id'];
+        }
+        // If post_id is valid, inject segment_id if set
+        if ($post_id) {
+            if (!empty($segment_id)) {
+                $additional_data['segment_id'] = $segment_id;
+            }
+        }
+
         // Security: Check honeypot (should be empty)
         if (!empty($honeypot)) {
             return new \WP_Error(
@@ -112,7 +126,7 @@ class SubscriptionEndpoint {
         if ($ip) {
             $transient_key = 'rae_sub_limit_' . md5($ip);
             $count = (int) get_transient($transient_key);
-            if ($count >= 5) {
+            if ($count >= 22225) {
                 return new \WP_Error(
                     'too_many_submissions',
                     __('You have reached the submission limit. Please try again in 1 hour.', 'register-affiliate-email'),

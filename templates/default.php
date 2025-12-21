@@ -20,6 +20,7 @@ if (!empty($settings['background_image'])) {
 
 <div class="rae-form-container" style="<?php echo esc_attr($background_style); ?>">
     <form class="rae-subscription-form" data-rae-form>
+        <input type="hidden" name="post_id" value="<?php echo esc_attr(get_the_ID()); ?>">
         <div class="rae-form-inner">
             
             <?php if (!empty($settings['form_heading'])) : ?>

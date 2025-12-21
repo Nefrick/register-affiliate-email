@@ -52,21 +52,28 @@
 
         // Show loading state
         submitBtn.disabled = true;
-        
+
         // Hide all form elements
         const formGroup = form.querySelector('.rae-form-group');
         const agreementEl = form.querySelector('.rae-agreement');
         const headingEl = form.querySelector('.rae-form-heading, .rae-fortune-form-heading');
         const subheadingEl = form.querySelector('.rae-form-subheading, .rae-fortune-form-subheading');
-        
+
         if (formGroup) formGroup.style.display = 'none';
         if (agreementEl) agreementEl.style.display = 'none';
         if (headingEl) headingEl.style.display = 'none';
         if (subheadingEl) subheadingEl.style.display = 'none';
-        
+
         // Show loading spinner
         loadingEl.style.display = 'flex';
         messageEl.style.display = 'none';
+
+        // Get post_id from hidden input if present
+        let postId = null;
+        const postIdInput = form.querySelector('input[name="post_id"]');
+        if (postIdInput && postIdInput.value) {
+            postId = postIdInput.value;
+        }
 
         try {
             // Make request to REST API
@@ -78,7 +85,7 @@
                 body: JSON.stringify({
                     email: email,
                     website: honeypotInput ? honeypotInput.value : '',
-                    additional_data: {}
+                    additional_data: postId ? { post_id: postId } : {}
                 })
             });
 

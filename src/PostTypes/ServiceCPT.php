@@ -260,27 +260,22 @@ class ServiceCPT {
                 if (class_exists('RegisterAffiliateEmail\\Services\\CustomerIOSegments')) {
                     try {
                         $segments = \RegisterAffiliateEmail\Services\CustomerIOSegments::getSegments($field_values['api_key']);
-                        error_log('Customer.io segments response: ' . print_r($segments, true)); // DEBUG
                         if (is_array($segments)) {
-                            // Оставляем только нужные поля
+                            // Only keep required fields
                             $simple_segments = [];
                             foreach ($segments as $segment) {
-                                if (isset($segment['id'], $segment['name'], $segment['description'])) {
-                                        $simple_segments[] = [
-                                            'id' => $segment['id'],
-                                            'name' => str_replace('"', '\\"', (string)$segment['name']),
-                                            'description' => str_replace('"', '\\"', (string)$segment['description']),
+                                if (isset($segment['id'], $segment['name'], $segment['description'], $segment['type']) && $segment['type'] === 'manual') {
+                                    $simple_segments[] = [
+                                        'id' => $segment['id'],
+                                        'name' => str_replace('"', '\\"', (string)$segment['name']),
+                                        'description' => str_replace('"', '\\"', (string)$segment['description']),
                                     ];
                                 }
                             }
-                            // Используем JSON_UNESCAPED_UNICODE и JSON_UNESCAPED_SLASHES для корректного кодирования
                             update_post_meta($post_id, '_rae_customerio_segments', json_encode($simple_segments, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-                            error_log('Saved _rae_customerio_segments for post_id ' . $post_id); // DEBUG
-                        } else {
-                            error_log('Segments is not array for post_id ' . $post_id); // DEBUG
                         }
                     } catch (\Exception $e) {
-                        error_log('Customer.io segments exception: ' . $e->getMessage()); // DEBUG
+                        // Silent catch
                     }
                 }
             } else {

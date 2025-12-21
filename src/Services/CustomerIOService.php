@@ -49,7 +49,7 @@ class CustomerIOService extends AbstractService {
             return $validation;
         }
 
-        $this->log('Authentication validated');
+        // Authentication validated
         return true;
     }
 
@@ -61,22 +61,16 @@ class CustomerIOService extends AbstractService {
      * @return bool|\WP_Error
      */
     public function subscribe($email, $additional_data = []) {
-        $this->log("Subscribing email: {$email}");
-
+       
         // Create base64 credentials for Basic Auth
         $site_id = $this->getConfig('tracking_site_id');
         $api_key = $this->getConfig('tracking_api_key');
-        
-        $this->log("Using Site ID: {$site_id}");
-        
+     
         $credentials = base64_encode("{$site_id}:{$api_key}");
 
         // Customer.io customer identifier (use email hash for consistency)
         $customer_id = md5(strtolower(trim($email)));
         $endpoint = "https://track.customer.io/api/v1/customers/{$customer_id}";
-        
-        $this->log("Customer ID: {$customer_id}");
-        $this->log("Endpoint: {$endpoint}");
 
         $body = [
             'email' => $email,
@@ -87,8 +81,6 @@ class CustomerIOService extends AbstractService {
         if (!empty($additional_data)) {
             $body = array_merge($body, $additional_data);
         }
-        
-        $this->log("Request body: " . json_encode($body));
 
         $args = [
             'method' => 'PUT',
@@ -108,21 +100,19 @@ class CustomerIOService extends AbstractService {
             return $response;
         }
 
-        $this->log('Customer created successfully');
-
         // Add to segment if segment_id and api_key are provided
         $segment_id = $this->getConfig('segment_id');
         $app_api_key = $this->getConfig('api_key');
         
         if (!empty($segment_id) && !empty($app_api_key)) {
-            $this->log("Adding to segment: {$segment_id}");
+           
             $segment_result = $this->addToSegment($customer_id, $segment_id, $app_api_key);
             
             if (is_wp_error($segment_result)) {
                 $this->log('Failed to add to segment: ' . $segment_result->get_error_message(), 'warning');
                 // Don't fail the whole subscription if segment add fails
             } else {
-                $this->log('Added to segment successfully');
+                //$this->log('Added to segment successfully');
             }
         }
 
@@ -138,11 +128,11 @@ class CustomerIOService extends AbstractService {
      * @return bool|\WP_Error
      */
     protected function addToSegment($customer_id, $segment_id, $api_key) {
-        // Customer.io API for adding to manual segments
-        $endpoint = "https://api.customer.io/v1/api/segments/{$segment_id}/add_customers";
-        
+        // Customer.io API for adding to manual segments (use email as id_type)
+        $endpoint = "https://api.customer.io/v1/api/segments/{$segment_id}/add_customers?id_type=email";
+
         $this->log("Segment endpoint: {$endpoint}");
-        $this->log("Customer ID for segment: {$customer_id}");
+        $this->log("Email for segment: {$customer_id}");
         $this->log("Segment ID: {$segment_id}");
 
         $args = [
@@ -156,7 +146,7 @@ class CustomerIOService extends AbstractService {
             ]),
             'timeout' => 30,
         ];
-        
+
         $this->log("Segment request body: " . json_encode(['ids' => [$customer_id]]));
 
         $result = $this->makeRequest($endpoint, $args);

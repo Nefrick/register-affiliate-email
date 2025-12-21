@@ -42,6 +42,7 @@ $spin_button_text = $template_translations['spin_button'] ?? 'SPIN NOW';
 
                 <!-- Form (hidden initially, shown after spin) -->
                 <form class="rae-subscription-form rae-fortune-form" data-rae-form style="display: none;">
+                    <input type="hidden" name="post_id" value="<?php echo esc_attr(get_the_ID()); ?>">
                     <?php if (!empty($fortune_heading)) : ?>
                         <h2 class="rae-fortune-form-heading">
                             <?php echo wp_kses_post($fortune_heading); ?>
