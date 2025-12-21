@@ -150,7 +150,57 @@ class ServiceCPT {
                 </p>
             <?php endif; ?>
         </div>
-
+        <?php
+        // Customer.io segments display
+        if ($service_slug === 'customerio') {
+            $segments = get_post_meta($post->ID, '_rae_customerio_segments', true);
+            if (!empty($segments)) {
+                $decoded = is_string($segments) ? json_decode($segments, true) : $segments;
+                // Debug: log what we got
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log('Customer.io segments (raw): ' . print_r($segments, true));
+                    error_log('Customer.io segments (decoded): ' . print_r($decoded, true));
+                }
+              
+                if (!is_array($decoded) && is_string($segments)) {
+                    $fixed = preg_replace('/\\"/', '"', $segments);
+                    $decoded_fixed = json_decode($fixed, true);
+                    if (is_array($decoded_fixed)) {
+                        $decoded = $decoded_fixed;
+                    }
+                }
+                if (is_array($decoded)) {
+                    echo '<div style="margin-top:20px;padding:10px;background:#f9f9f9;border:1px solid #eee;">';
+                    echo '<strong>' . __('Customer.io Segments (readonly):', 'register-affiliate-email') . '</strong>';
+                    echo '<table style="width:100%;margin-top:8px;"><thead><tr>';
+                    echo '<th style="text-align:left;">' . __('ID', 'register-affiliate-email') . '</th>';
+                    echo '<th style="text-align:left;">' . __('Name', 'register-affiliate-email') . '</th>';
+                    echo '<th style="text-align:left;">' . __('Description', 'register-affiliate-email') . '</th>';
+                    echo '</tr></thead><tbody>';
+                    foreach ($decoded as $segment) {
+                        echo '<tr>';
+                        echo '<td>' . esc_html($segment['id'] ?? '-') . '</td>';
+                        echo '<td>' . esc_html($segment['name'] ?? '-') . '</td>';
+                        echo '<td>' . esc_html($segment['description'] ?? '-') . '</td>';
+                        echo '</tr>';
+                    }
+                    echo '</tbody></table>';
+                    echo '<p class="description">' . __('This list is fetched from Customer.io and cannot be edited manually.', 'register-affiliate-email') . '</p>';
+                    echo '</div>';
+                } else {                 
+                    echo '<div style="margin-top:20px;color:#d63638;">' . __('Segments data is not an array.', 'register-affiliate-email') . '</div>';
+                    if (is_null($decoded)) {
+                        echo '<div style="color:#d63638;">JSON decode error: ' . esc_html(json_last_error_msg()) . '</div>';
+                    } else {
+                        echo '<div style="color:#d63638;">Type: ' . esc_html(gettype($decoded)) . '</div>';
+                    }
+                    echo '<div style="color:#d63638;word-break:break-all;max-width:600px;">Raw: ' . esc_html(substr($segments,0,1000)) . '</div>';
+                }
+            } else {
+                echo '<div style="margin-top:20px;color:#d63638;">' . __('No segments found for this Customer.io service.', 'register-affiliate-email') . '</div>';
+            }
+        }
+        ?>
         <!-- Hidden field to store final JSON config -->
         <input type="hidden" id="rae_service_config_json" name="rae_service_config" value="<?php echo esc_attr($config_json); ?>" />
         
@@ -205,6 +255,37 @@ class ServiceCPT {
         if ($config) {
             $config_json = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             update_post_meta($post_id, '_rae_service_config', $config_json);
+
+            if ($service_type === 'customerio' && !empty($field_values['api_key'])) {
+                if (class_exists('RegisterAffiliateEmail\\Services\\CustomerIOSegments')) {
+                    try {
+                        $segments = \RegisterAffiliateEmail\Services\CustomerIOSegments::getSegments($field_values['api_key']);
+                        error_log('Customer.io segments response: ' . print_r($segments, true)); // DEBUG
+                        if (is_array($segments)) {
+                            // Оставляем только нужные поля
+                            $simple_segments = [];
+                            foreach ($segments as $segment) {
+                                if (isset($segment['id'], $segment['name'], $segment['description'])) {
+                                        $simple_segments[] = [
+                                            'id' => $segment['id'],
+                                            'name' => str_replace('"', '\\"', (string)$segment['name']),
+                                            'description' => str_replace('"', '\\"', (string)$segment['description']),
+                                    ];
+                                }
+                            }
+                            // Используем JSON_UNESCAPED_UNICODE и JSON_UNESCAPED_SLASHES для корректного кодирования
+                            update_post_meta($post_id, '_rae_customerio_segments', json_encode($simple_segments, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+                            error_log('Saved _rae_customerio_segments for post_id ' . $post_id); // DEBUG
+                        } else {
+                            error_log('Segments is not array for post_id ' . $post_id); // DEBUG
+                        }
+                    } catch (\Exception $e) {
+                        error_log('Customer.io segments exception: ' . $e->getMessage()); // DEBUG
+                    }
+                }
+            } else {
+                delete_post_meta($post_id, '_rae_customerio_segments');
+            }
         }
     }
 
@@ -228,12 +309,8 @@ class ServiceCPT {
             wp_localize_script('rae-service-admin', 'raeServiceAdmin', [
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('rae_service_fields'),
-                'selectServiceText' => __('Please select a service type first.', 'register-affiliate-email'),
-                'loadingText' => __('Loading...', 'register-affiliate-email'),
-                'loadFieldsText' => __('Load Service Fields', 'register-affiliate-email'),
-                'errorText' => __('Error loading service fields. Please try again.', 'register-affiliate-email'),
-                'showJsonText' => __('Show JSON', 'register-affiliate-email'),
                 'hideJsonText' => __('Hide JSON', 'register-affiliate-email'),
+                'showJsonText' => __('Show JSON', 'register-affiliate-email'),
             ]);
         }
     }

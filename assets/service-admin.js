@@ -3,15 +3,17 @@
  * Handles dynamic field loading when service type is selected
  */
 
+
 (function() {
     'use strict';
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // JSON toggle functionality
+    // Функция для навешивания обработчика на кнопку Show JSON
+    window.attachRaeJsonToggle = function() {
         var toggleJsonBtn = document.getElementById('rae-toggle-json');
         var jsonPreview = document.getElementById('rae-json-preview');
-        
         if (toggleJsonBtn && jsonPreview) {
+            // Сначала удаляем старый обработчик, если был
+            toggleJsonBtn.onclick = null;
             toggleJsonBtn.addEventListener('click', function() {
                 if (jsonPreview.style.display === 'none') {
                     jsonPreview.style.display = 'block';
@@ -22,6 +24,11 @@
                 }
             });
         }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // JSON toggle functionality
+        window.attachRaeJsonToggle();
 
         // Load service fields button
         var loadFieldsBtn = document.getElementById('rae-load-service-fields');
