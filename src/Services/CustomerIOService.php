@@ -72,14 +72,35 @@ class CustomerIOService extends AbstractService {
         $customer_id = md5(strtolower(trim($email)));
         $endpoint = "https://track.customer.io/api/v1/customers/{$customer_id}";
 
+
         $body = [
             'email' => $email,
             'created_at' => time(),
         ];
 
-        // Merge additional data
+        // Get segment_id from post_meta if post_id is provided, and add post_id to profile
+        $segment_id = null;
+        if (!empty($additional_data['post_id'])) {
+            $post_id = (int)$additional_data['post_id'];
+            $body['post_id'] = $post_id;
+            $segment_meta = get_post_meta($post_id, '_rae_customerio_segment_id', true);
+            $this->log('DEBUG: post_id=' . $post_id . ' segment_meta=' . print_r($segment_meta, true));
+            if (is_array($segment_meta) && !empty($segment_meta['id'])) {
+                $segment_id = $segment_meta['id'];
+                $body['segment_id'] = $segment_id;
+                if (!empty($segment_meta['title'])) {
+                    $body['segment_title'] = $segment_meta['title'];
+                }
+            } elseif (!empty($segment_meta)) {
+                // fallback: если вдруг в мета лежит просто id
+                $segment_id = $segment_meta;
+                $body['segment_id'] = $segment_id;
+            }
+        }
+
+        // Merge additional data (excluding post_id and segment_id to avoid duplication)
         if (!empty($additional_data)) {
-            $body = array_merge($body, $additional_data);
+            $body = array_merge($body, array_diff_key($additional_data, ['post_id' => true, 'segment_id' => true]));
         }
 
         $args = [
@@ -100,19 +121,13 @@ class CustomerIOService extends AbstractService {
             return $response;
         }
 
-        // Add to segment if segment_id and api_key are provided
-        $segment_id = $this->getConfig('segment_id');
+        // Add to segment if segment_id and api_key are provided (segment_id from post_meta)
         $app_api_key = $this->getConfig('api_key');
-        
         if (!empty($segment_id) && !empty($app_api_key)) {
-           
-            $segment_result = $this->addToSegment($customer_id, $segment_id, $app_api_key);
-            
+            $segment_result = $this->addToSegment($email, $segment_id, $app_api_key);
             if (is_wp_error($segment_result)) {
                 $this->log('Failed to add to segment: ' . $segment_result->get_error_message(), 'warning');
                 // Don't fail the whole subscription if segment add fails
-            } else {
-                //$this->log('Added to segment successfully');
             }
         }
 
