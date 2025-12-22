@@ -93,5 +93,31 @@ class FailedSubscriptionsListTable extends \WP_List_Table {
     public function no_items() {
         _e('No failed subscriptions found.', 'register-affiliate-email');
     }
+
+    public function process_bulk_action() {
+       
+        if ($this->current_action() === 'delete' && current_user_can('manage_options')) {
+            
+            check_admin_referer('bulk-' . $this->_args['plural']);
+            $ids = isset($_POST['id']) ? (array) $_POST['id'] : [];
+            
+            if (!empty($ids)) {
+                global $wpdb;
+                $table = $wpdb->prefix . 'rae_failed_subscriptions';
+                $ids = array_map('intval', $ids);
+                $in = implode(',', array_fill(0, count($ids), '%d'));
+                $wpdb->query($wpdb->prepare("DELETE FROM $table WHERE id IN ($in)", ...$ids));
+               
+                wp_redirect(add_query_arg(['page' => 'rae-failed-subscriptions', 'deleted' => count($ids)], admin_url('admin.php')));
+                exit;
+            }
+        }
+    }
+
+    public function extra_tablenav($which) {
+        if ($which === 'top') {
+            echo '<input type="hidden" name="page" value="rae-failed-subscriptions" />';
+        }
+    }
 }
 
