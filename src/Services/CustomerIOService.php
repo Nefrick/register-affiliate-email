@@ -84,7 +84,6 @@ class CustomerIOService extends AbstractService {
             $post_id = (int)$additional_data['post_id'];
             $body['post_id'] = $post_id;
             $segment_meta = get_post_meta($post_id, '_rae_customerio_segment_id', true);
-            $this->log('DEBUG: post_id=' . $post_id . ' segment_meta=' . print_r($segment_meta, true));
             if (is_array($segment_meta) && !empty($segment_meta['id'])) {
                 $segment_id = $segment_meta['id'];
                 $body['segment_id'] = $segment_id;
@@ -117,7 +116,6 @@ class CustomerIOService extends AbstractService {
 
         if (is_wp_error($response)) {
             $error_data = $response->get_error_data();
-            $this->log('Subscription failed: ' . $response->get_error_message() . ' | Data: ' . print_r($error_data, true), 'error');
             return $response;
         }
 
@@ -125,10 +123,7 @@ class CustomerIOService extends AbstractService {
         $app_api_key = $this->getConfig('api_key');
         if (!empty($segment_id) && !empty($app_api_key)) {
             $segment_result = $this->addToSegment($email, $segment_id, $app_api_key);
-            if (is_wp_error($segment_result)) {
-                $this->log('Failed to add to segment: ' . $segment_result->get_error_message(), 'warning');
-                // Don't fail the whole subscription if segment add fails
-            }
+            // Don't fail the whole subscription if segment add fails
         }
 
         return true;
@@ -146,10 +141,6 @@ class CustomerIOService extends AbstractService {
         // Customer.io API for adding to manual segments (use email as id_type)
         $endpoint = "https://api.customer.io/v1/api/segments/{$segment_id}/add_customers?id_type=email";
 
-        $this->log("Segment endpoint: {$endpoint}");
-        $this->log("Email for segment: {$customer_id}");
-        $this->log("Segment ID: {$segment_id}");
-
         $args = [
             'method' => 'POST',
             'headers' => [
@@ -162,17 +153,7 @@ class CustomerIOService extends AbstractService {
             'timeout' => 30,
         ];
 
-        $this->log("Segment request body: " . json_encode(['ids' => [$customer_id]]));
-
         $result = $this->makeRequest($endpoint, $args);
-        
-        if (is_wp_error($result)) {
-            $error_data = $result->get_error_data();
-            $this->log('Segment add error: ' . $result->get_error_message() . ' | Status: ' . ($error_data['status_code'] ?? 'unknown') . ' | Response: ' . print_r($error_data['response'] ?? [], true), 'error');
-        } else {
-            $this->log('Segment API response: ' . print_r($result, true));
-        }
-        
         return $result;
     }
 }

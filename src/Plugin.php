@@ -76,16 +76,13 @@ class Plugin {
      */
     public static function activate() {
         // Register custom post type
-        error_log('RAE Plugin activate: start');
         $cpt = new PostTypes\ServiceCPT();
         $cpt->register();
 
         // Create failed subscriptions table
         if (class_exists('RegisterAffiliateEmail\\Admin\\FailedSubscriptionsTable')) {
-            error_log('RAE Plugin activate: class exists');
             \RegisterAffiliateEmail\Admin\FailedSubscriptionsTable::install();
         } else {
-            error_log('RAE Plugin activate: require class');
             require_once RAE_PLUGIN_DIR . 'src/Admin/FailedSubscriptionsTable.php';
             \RegisterAffiliateEmail\Admin\FailedSubscriptionsTable::install();
         }
@@ -102,7 +99,6 @@ class Plugin {
                 'enabled_services' => []
             ]);
         }
-        error_log('RAE Plugin activate: end');
     }
 
     /**

@@ -18,13 +18,7 @@ class FailedSubscriptionsTable {
             PRIMARY KEY (id)
         ) $charset_collate;";
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        error_log('RAE TABLE: about to run dbDelta');
-        error_log('RAE TABLE SQL: ' . $sql);
         dbDelta($sql);
-        error_log('RAE TABLE: dbDelta finished');
-        if ($wpdb->last_error) {
-            error_log('RAE TABLE ERROR: ' . $wpdb->last_error);
-        }
     }
 
     public static function uninstall() {
