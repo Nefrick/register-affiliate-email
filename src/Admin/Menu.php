@@ -65,6 +65,9 @@ class Menu {
             'manage_options',
             'edit.php?post_type=rae_service'
         );
+
+        // Failed Subscriptions submenu
+        \RegisterAffiliateEmail\Admin\FailedSubscriptionsPage::register();
     }
 
     /**

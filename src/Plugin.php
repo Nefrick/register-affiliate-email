@@ -40,6 +40,8 @@ class Plugin {
     public function init() {
         // Load text domain
         add_action('init', [$this, 'loadTextDomain']);
+
+        // ...existing code...
         
         // Initialize components
         new Admin\Menu();
@@ -72,14 +74,25 @@ class Plugin {
     /**
      * Plugin activation
      */
-    public function activate() {
+    public static function activate() {
         // Register custom post type
+        error_log('RAE Plugin activate: start');
         $cpt = new PostTypes\ServiceCPT();
         $cpt->register();
-        
+
+        // Create failed subscriptions table
+        if (class_exists('RegisterAffiliateEmail\\Admin\\FailedSubscriptionsTable')) {
+            error_log('RAE Plugin activate: class exists');
+            \RegisterAffiliateEmail\Admin\FailedSubscriptionsTable::install();
+        } else {
+            error_log('RAE Plugin activate: require class');
+            require_once RAE_PLUGIN_DIR . 'src/Admin/FailedSubscriptionsTable.php';
+            \RegisterAffiliateEmail\Admin\FailedSubscriptionsTable::install();
+        }
+
         // Flush rewrite rules
         flush_rewrite_rules();
-        
+
         // Set default options
         if (!get_option('rae_form_settings')) {
             update_option('rae_form_settings', [
@@ -89,6 +102,7 @@ class Plugin {
                 'enabled_services' => []
             ]);
         }
+        error_log('RAE Plugin activate: end');
     }
 
     /**

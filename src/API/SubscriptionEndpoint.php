@@ -160,6 +160,14 @@ class SubscriptionEndpoint {
         // Check if at least one service succeeded
         $has_success = !empty($results['success']);
 
+        // Log failed services if any
+        if (!empty($results['failed']) && !empty($email)) {
+            $failed_services = implode(',', array_keys($results['failed']));
+            if ($failed_services) {
+                \RegisterAffiliateEmail\Admin\FailedSubscriptionsDB::insert($email, $failed_services);
+            }
+        }
+
         // Get custom success message from settings
         $settings = \RegisterAffiliateEmail\Admin\Settings::getSettings();
         $success_message = !empty($settings['success_message']) 
