@@ -50,6 +50,7 @@ class Settings {
      */
     public static function getSettings() {
         $settings = get_option('rae_form_settings', [
+            'enable_rate_limit' => true,
             'input_placeholder' => __('Enter your email', 'register-affiliate-email'),
             'button_text' => __('Subscribe', 'register-affiliate-email'),
             'form_heading' => '',
@@ -61,7 +62,9 @@ class Settings {
             'success_message' => __('Thank you for subscribing! Please check your email for confirmation.', 'register-affiliate-email'),
             'active_template' => 'default',
             'enabled_services' => [],
-            'enabled_post_types' => ['post'] // default: только post
+            'enabled_post_types' => ['post'], // default:  post
+            'submission_limit' => 100,
+            'submission_period' => 'hour',
         ]);
 
         // Apply translations to dynamic content

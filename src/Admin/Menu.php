@@ -88,6 +88,7 @@ class Menu {
      */
     private function saveSettings() {
         $settings = [
+            'enable_rate_limit' => isset($_POST['rae_enable_rate_limit']),
             'input_placeholder' => sanitize_text_field(wp_unslash($_POST['rae_input_placeholder'] ?? '')),
             'button_text' => sanitize_text_field(wp_unslash($_POST['rae_button_text'] ?? '')),
             'form_heading' => wp_kses_post(wp_unslash($_POST['rae_form_heading'] ?? '')),
@@ -99,7 +100,9 @@ class Menu {
             'success_message' => wp_kses_post(wp_unslash($_POST['rae_success_message'] ?? '')),
             'active_template' => sanitize_text_field($_POST['rae_active_template'] ?? 'default'),
             'enabled_services' => array_map('intval', $_POST['rae_enabled_services'] ?? []),
-            'enabled_post_types' => isset($_POST['rae_enabled_post_types']) ? array_map('sanitize_text_field', (array) $_POST['rae_enabled_post_types']) : ['post']
+            'enabled_post_types' => isset($_POST['rae_enabled_post_types']) ? array_map('sanitize_text_field', (array) $_POST['rae_enabled_post_types']) : ['post'],
+            'submission_limit' => isset($_POST['rae_submission_limit']) ? (int)$_POST['rae_submission_limit'] : 100,
+            'submission_period' => isset($_POST['rae_submission_period']) && $_POST['rae_submission_period'] === 'day' ? 'day' : 'hour',
         ];
 
         update_option('rae_form_settings', $settings);

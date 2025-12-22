@@ -43,6 +43,40 @@ $update_available = $remote_version && version_compare($current_version, $remote
             <tbody>
                 <tr>
                     <th scope="row">
+                        <label for="rae_enable_rate_limit">
+                            <?php _e('Enable Rate Limit', 'register-affiliate-email'); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="rae_enable_rate_limit" name="rae_enable_rate_limit" value="1" <?php checked($settings['enable_rate_limit'] ?? true); ?> />
+                            <?php _e('Limit submissions per IP', 'register-affiliate-email'); ?>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="rae_submission_limit">
+                            <?php _e('Submission Limit', 'register-affiliate-email'); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <input
+                            type="number"
+                            id="rae_submission_limit"
+                            name="rae_submission_limit"
+                            value="<?php echo esc_attr($settings['submission_limit'] ?? 22225); ?>"
+                            min="1"
+                            class="small-text"
+                        />
+                        <select name="rae_submission_period" id="rae_submission_period">
+                            <option value="hour" <?php selected(($settings['submission_period'] ?? 'hour'), 'hour'); ?>><?php _e('per hour', 'register-affiliate-email'); ?></option>
+                            <option value="day" <?php selected(($settings['submission_period'] ?? 'hour'), 'day'); ?>><?php _e('per day', 'register-affiliate-email'); ?></option>
+                        </select>
+                        <span class="description"><?php _e('Maximum number of submissions allowed per IP in the selected period.', 'register-affiliate-email'); ?></span>
+                    </td>
+                </tr>
+                    <th scope="row">
                         <label for="rae_input_placeholder">
                             <?php _e('Input Placeholder', 'register-affiliate-email'); ?>
                         </label>

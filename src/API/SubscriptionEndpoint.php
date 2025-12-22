@@ -121,19 +121,24 @@ class SubscriptionEndpoint {
             );
         }
 
-        // Ограничение по IP: не более 5 отправок за 1 час
+        // Rate limiting: configurable submissions per period per IP
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
-        if ($ip) {
+        $settings = \RegisterAffiliateEmail\Admin\Settings::getSettings();
+        if (!empty($settings['enable_rate_limit']) && $ip) {
+            $limit = !empty($settings['submission_limit']) ? (int)$settings['submission_limit'] : 100;
+            $period = !empty($settings['submission_period']) ? $settings['submission_period'] : 'hour';
+            $period_seconds = $period === 'day' ? DAY_IN_SECONDS : HOUR_IN_SECONDS;
             $transient_key = 'rae_sub_limit_' . md5($ip);
             $count = (int) get_transient($transient_key);
-            if ($count >= 22225) {
+            if ($count >= $limit) {
+                $period_label = $period === 'day' ? __('24 hours', 'register-affiliate-email') : __('1 hour', 'register-affiliate-email');
                 return new \WP_Error(
                     'too_many_submissions',
-                    __('You have reached the submission limit. Please try again in 1 hour.', 'register-affiliate-email'),
+                    sprintf(__('You have reached the submission limit. Please try again in %s.', 'register-affiliate-email'), $period_label),
                     ['status' => 429]
                 );
             }
-            set_transient($transient_key, $count + 1, HOUR_IN_SECONDS);
+            set_transient($transient_key, $count + 1, $period_seconds);
         }
 
         // Validate email
