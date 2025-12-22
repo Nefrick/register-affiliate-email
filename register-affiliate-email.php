@@ -47,6 +47,10 @@ spl_autoload_register(static function ($class) {
 // Initialize plugin
 add_action('plugins_loaded', function() {
     Plugin::getInstance()->init();
+    // Register AJAX export handler
+    if (is_admin()) {
+        \RegisterAffiliateEmail\Admin\FailedSubscriptionsPage::register_ajax();
+    }
 });
 
 // Activation hook

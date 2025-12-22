@@ -6,6 +6,39 @@
 namespace RegisterAffiliateEmail\Admin;
 
 class FailedSubscriptionsPage {
+        // AJAX export handler registration
+        public static function register_ajax() {
+            add_action('wp_ajax_rae_export_failed_subscriptions', [__CLASS__, 'ajax_export_csv']);
+        }
+
+        public static function ajax_export_csv() {
+            if (!current_user_can('manage_options')) {
+                wp_die('No permission');
+            }
+            // Очистить все буферы вывода
+            while (ob_get_level()) {
+                ob_end_clean();
+            }
+            global $wpdb;
+            $table = $wpdb->prefix . 'rae_failed_subscriptions';
+            $rows = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC", ARRAY_A);
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename=failed_subscriptions.csv');
+            header('Pragma: no-cache');
+            header('Expires: 0');
+            $output = fopen('php://output', 'w');
+            fputcsv($output, ['ID', 'Email', 'Failed Services', 'Date']);
+            foreach ($rows as $row) {
+                fputcsv($output, [
+                    $row['id'],
+                    $row['email'],
+                    $row['failed_services'],
+                    $row['created_at']
+                ]);
+            }
+            fclose($output);
+            exit;
+        }
     public static function register() {
         add_submenu_page(
             'register-affiliate-email',
@@ -33,8 +66,8 @@ class FailedSubscriptionsPage {
             . '</p>';
         echo '</form>';
 
-        // Export button
-        $export_url = add_query_arg(['page' => 'rae-failed-subscriptions', 'rae_export_csv' => 1], admin_url('admin.php'));
+        // Export button (AJAX)
+        $export_url = admin_url('admin-ajax.php?action=rae_export_failed_subscriptions');
         echo '<a href="' . esc_url($export_url) . '" class="button button-secondary" style="margin-bottom:10px;">' . esc_html__('Export to CSV', 'register-affiliate-email') . '</a>';
 
         // Table
