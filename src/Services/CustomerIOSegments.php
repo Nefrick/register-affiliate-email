@@ -3,11 +3,7 @@ namespace RegisterAffiliateEmail\Services;
 
 class CustomerIOSegments {
     public static function getSegments($api_key) {
-        $cache_key = 'rae_customerio_segments';
-        $segments = get_transient($cache_key);
-        if ($segments !== false) {
-            return $segments;
-        }
+       
         $endpoint = 'https://api.customer.io/v1/segments';
         $response = wp_remote_get($endpoint, [
             'headers' => [
@@ -22,14 +18,7 @@ class CustomerIOSegments {
         $body = wp_remote_retrieve_body($response);
         $data = json_decode($body, true);
         $segments = isset($data['segments']) ? $data['segments'] : [];
-        // Filter only manual segments
-        $manual_segments = [];
-        foreach ($segments as $segment) {
-            if (isset($segment['type']) && $segment['type'] === 'manual') {
-                $manual_segments[] = $segment;
-            }
-        }
-        set_transient($cache_key, $manual_segments, DAY_IN_SECONDS);
-        return $manual_segments;
+       
+        return $segments;
     }
 }

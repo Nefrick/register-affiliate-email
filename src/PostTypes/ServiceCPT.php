@@ -185,7 +185,7 @@ class ServiceCPT {
                         echo '</tr>';
                     }
                     echo '</tbody></table>';
-                    echo '<p class="description">' . __('This list is fetched from Customer.io and cannot be edited manually.', 'register-affiliate-email') . '</p>';
+                    echo '<p class="description">' . __('This list is fetched from Customer.io and cannot be edited manually. If you want to transfer the segment to the website, the description must include the word customer.io.', 'register-affiliate-email') . '</p>';
                     echo '</div>';
                 } else {                 
                     echo '<div style="margin-top:20px;color:#d63638;">' . __('Segments data is not an array.', 'register-affiliate-email') . '</div>';
@@ -264,7 +264,7 @@ class ServiceCPT {
                             // Only keep required fields
                             $simple_segments = [];
                             foreach ($segments as $segment) {
-                                if (isset($segment['id'], $segment['name'], $segment['description'], $segment['type']) && $segment['type'] === 'manual') {
+                                if (isset($segment['id'], $segment['name'], $segment['description'], $segment['type']) && $segment['description'] === 'customer.io') {
                                     $simple_segments[] = [
                                         'id' => $segment['id'],
                                         'name' => str_replace('"', '\\"', (string)$segment['name']),
@@ -272,6 +272,7 @@ class ServiceCPT {
                                     ];
                                 }
                             }
+                          
                             update_post_meta($post_id, '_rae_customerio_segments', json_encode($simple_segments, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
                         }
                     } catch (\Exception $e) {

@@ -88,14 +88,25 @@ class CustomerIOService extends AbstractService {
                 $segment_id = $segment_meta['id'];
                 $body['segment_id'] = $segment_id;
                 if (!empty($segment_meta['title'])) {
-                    $body['segment_title'] = $segment_meta['title'];
+                    $body['segment_title'] = $segment_meta['title']; // segment name
                 }
             } elseif (!empty($segment_meta)) {
                 // fallback: если вдруг в мета лежит просто id
                 $segment_id = $segment_meta;
                 $body['segment_id'] = $segment_id;
             }
+
+            // Add page name and slug if post_id is set
+            $body['page_name'] = get_the_title($post_id);
+            $body['page_slug'] = get_post_field('post_name', $post_id);
         }
+
+        // Add site name
+        $body['site'] = get_bloginfo('name');
+        // Add site domain
+        $body['site_domain'] = parse_url(home_url(), PHP_URL_HOST);
+        // Add current locale
+        $body['locale'] = get_locale();
 
         // Merge additional data (excluding post_id and segment_id to avoid duplication)
         if (!empty($additional_data)) {

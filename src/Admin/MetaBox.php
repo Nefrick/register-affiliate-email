@@ -72,10 +72,12 @@ class MetaBox {
                     echo '<select name="rae_customerio_segment_id" style="margin-top:8px; max-width:100%; width:auto; min-width:180px;">';
                     echo '<option value="">' . __('Empty', 'register-affiliate-email') . '</option>';
                     foreach ($segments as $segment) {
-                        $seg_id = esc_attr($segment['id'] ?? '');
-                        $seg_name = esc_html($segment['name'] ?? '-');
-                        $selected = ($seg_id && $seg_id == $selected_segment_id) ? 'selected' : '';
-                        echo "<option value=\"$seg_id\" data-title=\"$seg_name\" $selected>$seg_name ($seg_id)</option>";
+                        $seg_name = $segment['name'] ?? '-';
+                        $seg_key = strtolower(str_replace(' ', '_', $seg_name));
+                        $seg_key = esc_attr($seg_key);
+                        $seg_name = esc_html($seg_name);
+                        $selected = ($seg_key && $seg_key == $selected_segment_id) ? 'selected' : '';
+                        echo "<option value=\"$seg_key\" data-title=\"$seg_name\" $selected>$seg_name ($seg_key)</option>";
                     }
                     echo '</select>';
                     if ($selected_segment_id && $selected_segment_title) {
