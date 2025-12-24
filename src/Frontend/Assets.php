@@ -19,9 +19,12 @@ class Assets {
      * Enqueue frontend assets
      */
     public function enqueueAssets() {
-        // Only enqueue if shortcode is present
+        // Подключаем ассеты, если активен чекбокс "Show subscription form on this post"
         global $post;
-        if (!is_a($post, 'WP_Post') || !has_shortcode($post->post_content, 'register_affiliate_email')) {
+        // if (!is_a($post, 'WP_Post') || !has_shortcode($post->post_content, 'register_affiliate_email')) {
+        //     return;
+        // }
+        if (!is_a($post, 'WP_Post') || empty(get_post_meta($post->ID, '_rae_enable_form', true))) {
             return;
         }
 

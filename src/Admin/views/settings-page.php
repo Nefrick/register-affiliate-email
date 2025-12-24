@@ -65,7 +65,7 @@ $update_available = $remote_version && version_compare($current_version, $remote
                             type="number"
                             id="rae_submission_limit"
                             name="rae_submission_limit"
-                            value="<?php echo esc_attr($settings['submission_limit'] ?? 22225); ?>"
+                            value="<?php echo esc_attr($settings['submission_limit'] ?? 10); ?>"
                             min="1"
                             class="small-text"
                         />
