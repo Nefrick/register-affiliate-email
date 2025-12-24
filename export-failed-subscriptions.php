@@ -1,4 +1,3 @@
-fclose($output);
 <?php
 // export-failed-subscriptions.php
 // Download CSV with failed email subscriptions from rae_failed_subscriptions table
