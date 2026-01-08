@@ -105,8 +105,10 @@ class SubscriptionEndpoint {
         } elseif (isset($_POST['post_id'])) {
             $post_id = (int)$_POST['post_id'];
         }
+        
         // If post_id is valid, inject segment_id if set
         if ($post_id) {
+            $segment_id = get_post_meta($post_id, '_rae_customerio_segment_id', true);
             if (!empty($segment_id)) {
                 $additional_data['segment_id'] = $segment_id;
             }

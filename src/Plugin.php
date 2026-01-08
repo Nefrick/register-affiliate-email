@@ -96,6 +96,8 @@ class Plugin {
                 'input_placeholder' => __('Enter your email', 'register-affiliate-email'),
                 'button_text' => __('Subscribe', 'register-affiliate-email'),
                 'background_image' => '',
+                'button_text_color' => '#ffffff',
+                'form_text_color' => '#000000',
                 'enabled_services' => []
             ]);
         }

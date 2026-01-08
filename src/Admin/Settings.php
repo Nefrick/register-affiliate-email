@@ -9,6 +9,12 @@ namespace RegisterAffiliateEmail\Admin;
 
 class Settings {
     /**
+     * Cached settings
+     * @var array|null
+     */
+    private static $cached_settings = null;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -49,6 +55,11 @@ class Settings {
      * @return array
      */
     public static function getSettings() {
+        // Return cached settings if available
+        if (self::$cached_settings !== null) {
+            return self::$cached_settings;
+        }
+
         $settings = get_option('rae_form_settings', [
             'enable_rate_limit' => true,
             'input_placeholder' => __('Enter your email', 'register-affiliate-email'),
@@ -57,6 +68,8 @@ class Settings {
             'form_subheading' => '',
             'background_image' => '',
             'button_color' => '#0073aa', // default button color (WP blue)
+            'button_text_color' => '#ffffff', // default button text color (white)
+            'form_text_color' => '#000000', // default form text color (black)
             'show_agreement' => false,
             'agreement_text' => __('By subscribing, I accept the Terms and Privacy Policy and confirm that I am at least 19 years old.', 'register-affiliate-email'),
             'success_message' => __('Thank you for subscribing! Please check your email for confirmation.', 'register-affiliate-email'),
@@ -74,6 +87,17 @@ class Settings {
             }
         }
 
+        // Cache the settings
+        self::$cached_settings = $settings;
+
         return $settings;
+    }
+
+    /**
+     * Clear settings cache
+     * Call this after updating settings
+     */
+    public static function clearCache() {
+        self::$cached_settings = null;
     }
 }

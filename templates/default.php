@@ -24,13 +24,13 @@ if (!empty($settings['background_image'])) {
         <div class="rae-form-inner">
             
             <?php if (!empty($settings['form_heading'])) : ?>
-                <div class="rae-form-heading">
+                <div class="rae-form-heading" style="color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                     <?php echo wp_kses_post($settings['form_heading']); ?>
                 </div>
             <?php endif; ?>
 
             <?php if (!empty($settings['form_subheading'])) : ?>
-                <div class="rae-form-subheading">
+                <div class="rae-form-subheading" style="color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                     <?php echo wp_kses_post($settings['form_subheading']); ?>
                 </div>
             <?php endif; ?>
@@ -44,7 +44,7 @@ if (!empty($settings['background_image'])) {
                     autocomplete="email"
                     required
                 />
-                    <button type="submit" class="rae-submit-button" style="background: <?php echo esc_attr($settings['button_color'] ?? '#0073aa'); ?>;">
+                    <button type="submit" class="rae-submit-button" style="background: <?php echo esc_attr($settings['button_color'] ?? '#0073aa'); ?>; color: <?php echo esc_attr($settings['button_text_color'] ?? '#ffffff'); ?>;">
                         <?php echo esc_html($settings['button_text']); ?>
                     </button>
             </div>
@@ -53,15 +53,15 @@ if (!empty($settings['background_image'])) {
                 <div class="rae-agreement">
                     <label class="rae-checkbox">
                         <input type="checkbox" name="agreement" value="yes" required>
-                        <span class="rae-checkbox-label">
+                        <span class="rae-checkbox-label" style="color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                             <?php echo wp_kses_post($settings['agreement_text']); ?>
                         </span>
                     </label>
                 </div>
             <?php endif; ?>
 
-            <div class="rae-message" data-rae-message style="display: none;"></div>
-            <div class="rae-loading" data-rae-loading style="display: none;">
+            <div class="rae-message" data-rae-message style="display: none; color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;"></div>
+            <div class="rae-loading" data-rae-loading style="display: none; color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                 <?php echo \RegisterAffiliateEmail\Translations\TranslationsManager::__('submitting', ''); ?>
             </div>
 

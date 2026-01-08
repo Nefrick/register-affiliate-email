@@ -98,6 +98,8 @@ class Menu {
             'form_subheading' => wp_kses_post(wp_unslash($_POST['rae_form_subheading'] ?? '')),
             'background_image' => esc_url_raw($_POST['rae_background_image'] ?? ''),
             'button_color' => isset($_POST['rae_button_color']) ? sanitize_hex_color($_POST['rae_button_color']) : '#0073aa',
+            'button_text_color' => isset($_POST['rae_button_text_color']) ? sanitize_hex_color($_POST['rae_button_text_color']) : '#ffffff',
+            'form_text_color' => isset($_POST['rae_form_text_color']) ? sanitize_hex_color($_POST['rae_form_text_color']) : '#000000',
             'show_agreement' => isset($_POST['rae_show_agreement']),
             'agreement_text' => wp_kses_post(wp_unslash($_POST['rae_agreement_text'] ?? '')),
             'success_message' => wp_kses_post(wp_unslash($_POST['rae_success_message'] ?? '')),
@@ -109,6 +111,9 @@ class Menu {
         ];
 
         update_option('rae_form_settings', $settings);
+
+        // Clear settings cache
+        \RegisterAffiliateEmail\Admin\Settings::clearCache();
         
         add_settings_error(
             'rae_messages',

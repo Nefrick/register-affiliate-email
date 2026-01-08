@@ -32,7 +32,7 @@ $spin_button_text = $template_translations['spin_button'] ?? 'SPIN NOW';
     <div class="rae-fortune-wheel">
         <div class="rae-fortune-content">
             <div class="rae-fortune-inner">
-                <h2 class="rae-fortune-initial-text">
+                <h2 class="rae-fortune-initial-text" style="color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                     <?php echo esc_html($initial_text); ?>
                 </h2>
 
@@ -44,13 +44,13 @@ $spin_button_text = $template_translations['spin_button'] ?? 'SPIN NOW';
                 <form class="rae-subscription-form rae-fortune-form" data-rae-form style="display: none;">
                     <input type="hidden" name="post_id" value="<?php echo esc_attr(get_the_ID()); ?>">
                     <?php if (!empty($fortune_heading)) : ?>
-                        <h2 class="rae-fortune-form-heading">
+                        <h2 class="rae-fortune-form-heading" style="color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                             <?php echo wp_kses_post($fortune_heading); ?>
                         </h2>
                     <?php endif; ?>
 
                     <?php if (!empty($fortune_subheading)) : ?>
-                        <p class="rae-fortune-form-subheading">
+                        <div class="rae-fortune-subheading" style="color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                             <?php echo wp_kses_post($fortune_subheading); ?>
                         </p>
                     <?php endif; ?>
@@ -64,7 +64,7 @@ $spin_button_text = $template_translations['spin_button'] ?? 'SPIN NOW';
                             autocomplete="email"
                             required
                         />
-                        <button type="submit" class="rae-submit-button" style="background: <?php echo esc_attr($settings['button_color'] ?? '#ff5722'); ?>;">
+                        <button type="submit" class="rae-submit-button" style="background: <?php echo esc_attr($settings['button_color'] ?? '#ff5722'); ?>; color: <?php echo esc_attr($settings['button_text_color'] ?? '#ffffff'); ?>;">
                             <?php echo esc_html($button_text); ?>
                         </button>
                     </div>
@@ -73,15 +73,15 @@ $spin_button_text = $template_translations['spin_button'] ?? 'SPIN NOW';
                         <div class="rae-agreement">
                             <label class="rae-checkbox">
                                 <input type="checkbox" name="agreement" value="yes" required>
-                                <span class="rae-checkbox-label">
+                                <span class="rae-checkbox-label" style="color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                                     <?php echo wp_kses_post($agreement_text); ?>
                                 </span>
                             </label>
                         </div>
                     <?php endif; ?>
 
-                    <div class="rae-message" data-rae-message style="display: none;"></div>
-                    <div class="rae-loading" data-rae-loading style="display: none;">
+                    <div class="rae-message" data-rae-message style="display: none; color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;"></div>
+                    <div class="rae-loading" data-rae-loading style="display: none; color: <?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>;">
                         <?php echo \RegisterAffiliateEmail\Translations\TranslationsManager::__('submitting', ''); ?>
                     </div>
 

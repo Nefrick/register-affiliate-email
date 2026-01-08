@@ -259,6 +259,30 @@ $update_available = $remote_version && version_compare($current_version, $remote
 
                 <tr>
                     <th scope="row">
+                        <label for="rae_button_text_color">
+                            <?php _e('Button Text Color', 'register-affiliate-email'); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <input type="color" id="rae_button_text_color" name="rae_button_text_color" value="<?php echo esc_attr($settings['button_text_color'] ?? '#ffffff'); ?>" />
+                        <span class="description"><?php _e('Select the color for the button text.', 'register-affiliate-email'); ?></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">
+                        <label for="rae_form_text_color">
+                            <?php _e('Form Text Color', 'register-affiliate-email'); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <input type="color" id="rae_form_text_color" name="rae_form_text_color" value="<?php echo esc_attr($settings['form_text_color'] ?? '#000000'); ?>" />
+                        <span class="description"><?php _e('Select the color for all text inside the form (headings, labels, messages, etc.).', 'register-affiliate-email'); ?></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">
                         <label>
                             <?php _e('Enabled Services', 'register-affiliate-email'); ?>
                         </label>
